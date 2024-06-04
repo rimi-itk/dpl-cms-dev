@@ -50,6 +50,7 @@ docker compose exec phpfpm vendor/bin/drush --yes config:set dpl_pretix.settings
 
 docker compose exec phpfpm vendor/bin/drush config:get dpl_pretix.settings
 ```
+
 ## pretix
 
 ``` shell
@@ -63,5 +64,15 @@ docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user
 
 docker compose exec phpfpm vendor/bin/drush --yes config:set dpl_pretix.settings pretix.api_key $(docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')
 
-curl --header "Authorization: Token $(docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')" http://pretix.dpl-cms-develop.local.itkdev.dk/api/v1/events/
+curl --header "Authorization: Token $(docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')" http://pretix.dpl-cms-develop.local.itkdev.dk/api/v1/organizers/
+
+
+curl --header "Authorization: Token $(docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')" http://pretix.dpl-cms-develop.local.itkdev.dk/api/v1/organizers/dpl-cms/events/
+```
+
+## Coding standards
+
+``` shell
+docker run --rm --volume "$(pwd):/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md' --fix
+docker run --rm --volume "$(pwd):/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md'
 ```

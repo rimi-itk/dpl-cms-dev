@@ -5,6 +5,8 @@ networks:
 
 services:
   phpfpm:
+    environment:
+      - PHP_MEMORY_LIMIT=512M
     volumes:
       - ./dpl-cms:/app
 
@@ -27,13 +29,19 @@ services:
       - '80'
     volumes:
       - ${PWD}/.docker/pretix/etc/pretix.cfg:/etc/pretix/pretix.cfg
-
-    # Let the pretix container be accessible both internally and externally on the same domain.
-    container_name: pretix.${COMPOSE_DOMAIN}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=frontend"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_pretix.rule=Host(`pretix.${COMPOSE_DOMAIN}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_pretix.rule=Host(`pretix.${COMPOSE_SERVER_DOMAIN}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_pretix-http.entrypoints=web"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_pretix-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_pretix.entrypoints=websecure"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME}_pretix.loadbalancer.server.port=80"
+    environment:
+      # https://docs.pretix.eu/en/latest/admin/config.html#configuration-file
+      - PRETIX_PRETIX_INSTANCE_NAME=${PRETIX_PRETIX_INSTANCE_NAME}
+      - PRETIX_PRETIX_URL=${PRETIX_PRETIX_URL}
 
   pretix_database:
     # https://hub.docker.com/_/postgres
@@ -44,12 +52,13 @@ services:
       - pretix
     ports:
       - '3306'
-    # volumes:
-    #   - .docker/pretix/dumps:/docker-entrypoint-initdb.d
+    volumes:
+      # - .docker/pretix/dumps:/docker-entrypoint-initdb.d
+      - .docker/data/postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: pretix
-      POSTGRES_PASSWORD: pretix
-      POSTGRES_DATABASE: pretix
+      - POSTGRES_USER=pretix
+      - POSTGRES_PASSWORD=pretix
+      - POSTGRES_DATABASE=pretix
 
   pretix_redis:
     image: redis:latest
