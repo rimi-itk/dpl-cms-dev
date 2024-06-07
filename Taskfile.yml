@@ -1,0 +1,98 @@
+version: '3'
+
+vars:
+  DPL_CMS_DIRECTORY: dpl-cms
+  DPL_CMS_REPOSITORY_URL: https://github.com/danskernesdigitalebibliotek/dpl-cms
+  DPL_CMS_REPOSITORY_BRANCH: develop
+  DPL_PRETIX_REPOSITORY_URL: https://github.com/rimi-itk/dpl_pretix
+  DPL_PRETIX_REPOSITORY_BRANCH: dpl_pretix
+  DPL_PRETIX_DIRECTORY: '{{ .DPL_CMS_DIRECTORY }}/web/sites/default/files/modules_local/dpl_pretix'
+  DPL_CMS_SETTINGS_LOCAL: |
+    <?php
+
+    $settings['hash_salt'] = 'V-tz1Y86bnQ7IDugaKTbx0goQR64ewhdsWlscc00813DSYYuEf9ziG2Qqfo1zshlVQF_n37Lbg';
+
+    $databases['default']['default'] = [
+      'database' => getenv('DATABASE_DATABASE') ?: 'db',
+      'username' => getenv('DATABASE_USERNAME') ?: 'db',
+      'password' => getenv('DATABASE_PASSWORD') ?: 'db',
+      'host' => getenv('DATABASE_HOST') ?: 'mariadb',
+      'port' => getenv('DATABASE_PORT') ?: '',
+      'driver' => getenv('DATABASE_DRIVER') ?: 'mysql',
+      'prefix' => '',
+    ];
+  DPL_CMS_URL: http://dpl-cms-develop.local.itkdev.dk
+
+tasks:
+  dev:install:
+    prompt: "This will reset your setup. Continue?"
+    cmds:
+      # - task dev:compose -- down
+      - task dev:up
+
+      - rm -fr {{ .DPL_CMS_DIRECTORY }}
+      - git clone --branch {{ .DPL_CMS_REPOSITORY_BRANCH }} {{ .DPL_CMS_REPOSITORY_URL }} {{ .DPL_CMS_DIRECTORY }}
+      # Run `composer install` to create local module folder (cf. https://github.com/danskernesdigitalebibliotek/dpl-cms/blob/e59ef2a1f9f283a36222be7af05191c110b20cc0/composer.json#L212-L215)
+      - task dev:compose -- exec phpfpm composer install
+
+      # Clone DPL pretix module into local module folder
+      - rm -fr {{ .DPL_PRETIX_DIRECTORY }}
+      - git clone --branch {{ .DPL_PRETIX_REPOSITORY_BRANCH }} {{ .DPL_PRETIX_REPOSITORY_URL }} {{ .DPL_PRETIX_DIRECTORY }}
+
+      - |
+        cat > {{ .DPL_CMS_DIRECTORY }}/web/sites/default/settings.local.php <<'EOF'
+        <?php
+
+        $settings['hash_salt'] = 'V-tz1Y86bnQ7IDugaKTbx0goQR64ewhdsWlscc00813DSYYuEf9ziG2Qqfo1zshlVQF_n37Lbg';
+
+        $databases['default']['default'] = [
+          'database' => getenv('DATABASE_DATABASE') ?: 'db',
+          'username' => getenv('DATABASE_USERNAME') ?: 'db',
+          'password' => getenv('DATABASE_PASSWORD') ?: 'db',
+          'host' => getenv('DATABASE_HOST') ?: 'mariadb',
+          'port' => getenv('DATABASE_PORT') ?: '',
+          'driver' => getenv('DATABASE_DRIVER') ?: 'mysql',
+          'prefix' => '',
+        ];
+        EOF
+      - task dev:drush -- --yes site:install --existing-config
+
+      - task dev:drush -- --yes cache:rebuild
+      # - task dev:drush -- --yes pm:uninstall purge || true
+      - task dev:drush -- --yes pm:install devel dpl_example_content dpl_example_breadcrumb field_ui restui uuid_url views_ui dblog
+
+      - task dev:drush -- --yes pm:install dpl_pretix
+
+      - task dev:dpl-cms:open
+
+  dev:dpl-cms:open:
+      - open $(task dev:drush -- user:login /admin/config/dpl_pretix)
+
+  dev:up:
+    cmds:
+      - task dev:compose -- up --detach --build
+
+  dev:update:
+    cmds:
+      - task dev:up
+      - task dev:compose -- exec phpfpm composer install
+      - task dev:drush -- deploy
+
+  dev:compose:
+    cmds:
+      - docker compose --profile pretix {{ .CLI_ARGS }}
+    # silent: true
+
+  dev:drush:
+    cmds:
+      - task dev:compose -- exec phpfpm vendor/bin/drush --uri={{ .DPL_CMS_URL }} {{ .CLI_ARGS }}
+    silent: true
+
+  dev:pretix:dump-db:
+    cmds:
+      - task dev:compose -- exec --env PGPASSWORD=pretix pretix_database pg_dump --user=pretix pretix > .docker/pretix/dumps/pretix.sql
+
+  dev:code-analysis:
+    cmds:
+      # @todo run this inside phpfpm container
+      - (cd ./dpl-cms && ./vendor/bin/phpstan --configuration=../phpstan.neon.dist)

@@ -3,10 +3,15 @@
 ## DPL CMS
 
 ``` shell
+task dev:install
+task dev:update
+```
+
+``` shell
 git clone https://github.com/danskernesdigitalebibliotek/dpl-cms dpl-cms
 
-docker compose pull
-docker compose up --detach
+docker compose --profile pretix pull
+docker compose --profile pretix  up --detach
 
 # @todo resolve `sh: 1: [[: not found` error due to `"post-drupal-scaffold-cmd"` in composer.json.
 # Make `sh` point to `bash` (rather than `dash` which is the default in Ubuntu)
@@ -15,7 +20,7 @@ docker compose exec phpfpm composer install
 
 git clone --branch dpl_pretix https://github.com/rimi-itk/dpl_pretix dpl-cms/web/sites/default/files/modules_local/dpl_pretix
 
-cat > dpl-cms/web/sites/default/settings.local.php <<'EOF'
+cat >| dpl-cms/web/sites/default/settings.local.php <<'EOF'
 <?php
 
 $settings['hash_salt'] = 'V-tz1Y86bnQ7IDugaKTbx0goQR64ewhdsWlscc00813DSYYuEf9ziG2Qqfo1zshlVQF_n37Lbg';
@@ -29,6 +34,9 @@ $databases['default']['default'] = [
   'driver' => getenv('DATABASE_DRIVER') ?: 'mysql',
   'prefix' => '',
 ];
+
+$config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
+
 EOF
 
 docker compose exec phpfpm vendor/bin/drush --yes site:install --existing-config
