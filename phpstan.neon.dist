@@ -1,11 +1,15 @@
+# This is a sloppy copy of
+# https://github.com/danskernesdigitalebibliotek/dpl-cms/blob/develop/phpstan.neon.dist
+# medifixed to check only the dpl_pretix module.
+
 parameters:
   level: 8
   checkGenericClassInNonGenericObjectType: false
   paths:
-    - dpl-cms/web/sites/default/files/modules_local/dpl_pretix/
+    - web/sites/default/files/modules_local/dpl_pretix/
   excludePaths:
-    - dpl-cms/web/sites/default/files/modules_local/dpl_pretix/src/Pretix/ApiClient/
-    - dpl-cms/web/sites/default/files/modules_local/dpl_pretix/vendor/
+    - web/sites/default/files/modules_local/dpl_pretix/src/Pretix/
+    - web/sites/default/files/modules_local/dpl_pretix/vendor/
   ignoreErrors:
     - '#Unsafe usage of new static\(\).#'
     # Drupal Form API makes extensive use for arrays which we cannot provide
@@ -71,9 +75,10 @@ parameters:
     -
       # @fixme
       message: "#\\Drupal calls should be avoided in classes, use dependency injection instead#"
-      path: dpl-cms/web/sites/default/files/modules_local/dpl_pretix/src/Form/SettingsForm.php
+      path: web/sites/default/files/modules_local/dpl_pretix/src/Form/SettingsForm.php
     # Why are Pretix\ApiClient classes unknown?!
     - '#Drupal\\dpl_pretix\\Pretix\\ApiClient\\#'
+
 
 # Local Variables:
 # mode: yaml

@@ -1,2 +1,3 @@
 dpl-cms/
 .env.*.local
+*.local

@@ -80,7 +80,45 @@ curl --header "Authorization: Token $(docker compose exec --no-TTY --env PGPASSW
 
 ## Coding standards
 
-``` shell
-docker run --rm --volume "$(pwd):/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md' --fix
-docker run --rm --volume "$(pwd):/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md'
+``` shell name=coding-standards
+docker run --rm --volume "$PWD:/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md' --fix
+docker run --rm --volume "$PWD:/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore dpl-cms '**/*.md'
+```
+
+## Code analysis
+
+``` shell name=code-analysis
+# Copy our PHPStan config and use it.
+(cp phpstan.neon.dist dpl-cms/tmp.phpstan.neon.dist && docker compose run --rm phpfpm vendor/bin/phpstan --configuration=tmp.phpstan.neon.dist)
+```
+
+## Patches and other hacks
+
+We run into […… duplicated paths in URLs, such as
+/core/authorize.php/core/authorize.php](https://www.drupal.org/project/drupal/issues/2583799), so we add a band-aid in
+`.docker/templates/default.conf.template`.
+
+``` nginx
+    # @see https://www.drupal.org/project/drupal/issues/2583799#comment-10464799
+    rewrite ^/core/authorize.php/core/authorize.php(.*) /core/authorize.php$1 break;
+```
+
+For production, this patch must be applied (cf. [Security check failure with reverse
+proxy](https://www.drupal.org/project/drupal/issues/2934570)):
+
+``` diff
+diff --git a/dpl-cms/vendor/symfony/http-foundation/Request.php b/dpl-cms/vendor/symfony/http-foundation/Request.php
+index b482a76..2746af4 100644
+--- a/dpl-cms/vendor/symfony/http-foundation/Request.php
++++ b/dpl-cms/vendor/symfony/http-foundation/Request.php
+@@ -1106,6 +1106,9 @@ public function getQueryString(): ?string
+      */
+     public function isSecure(): bool
+     {
++        // @see https://www.drupal.org/project/drupal/issues/2934570
++        return TRUE;
++
+         if ($this->isFromTrustedProxy() && $proto = $this->getTrustedValues(self::HEADER_X_FORWARDED_PROTO)) {
+             return \in_array(strtolower($proto[0]), ['https', 'on', 'ssl', '1'], true);
+         }
 ```

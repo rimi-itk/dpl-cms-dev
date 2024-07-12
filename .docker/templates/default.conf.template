@@ -60,6 +60,9 @@ server {
         return 404;
     }
 
+    # https://www.drupal.org/project/drupal/issues/2583799#comment-10464799
+    rewrite ^/core/authorize.php/core/authorize.php(.*) /core/authorize.php$1 break;
+
     location ~ '\.php$|^/update.php' {
         include fastcgi_params;
 

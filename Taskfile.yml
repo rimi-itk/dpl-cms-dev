@@ -1,11 +1,14 @@
 version: '3'
 
+# https://taskfile.dev/usage/#env-files
+dotenv: ['.env.local', '.env']
+
 vars:
   DPL_CMS_DIRECTORY: dpl-cms
   DPL_CMS_REPOSITORY_URL: https://github.com/danskernesdigitalebibliotek/dpl-cms
   DPL_CMS_REPOSITORY_BRANCH: develop
-  DPL_PRETIX_REPOSITORY_URL: https://github.com/rimi-itk/dpl_pretix
-  DPL_PRETIX_REPOSITORY_BRANCH: dpl_pretix
+  DPL_PRETIX_REPOSITORY_URL: '{{ .TASK_DPL_PRETIX_REPOSITORY_URL | default "https://github.com/rimi-itk/dpl_pretix" }}'
+  DPL_PRETIX_REPOSITORY_BRANCH: '{{ .TASK_DPL_PRETIX_REPOSITORY_BRANCH | default "dpl_pretix" }}'
   DPL_PRETIX_DIRECTORY: '{{ .DPL_CMS_DIRECTORY }}/web/sites/default/files/modules_local/dpl_pretix'
   DPL_CMS_SETTINGS_LOCAL: |
     <?php
@@ -21,16 +24,17 @@ vars:
       'driver' => getenv('DATABASE_DRIVER') ?: 'mysql',
       'prefix' => '',
     ];
-  DPL_CMS_URL: http://dpl-cms-develop.local.itkdev.dk
+  DPL_CMS_URL: '{{ .TASK_DPL_CMS_URL | default "https://dpl-cms-develop.local.itkdev.dk" }}'
 
 tasks:
   dev:install:
     prompt: "This will reset your setup. Continue?"
     cmds:
+      - hest
       # - task dev:compose -- down
       - task dev:up
 
-      - rm -fr {{ .DPL_CMS_DIRECTORY }}
+      # - rm -fr {{ .DPL_CMS_DIRECTORY }}
       - git clone --branch {{ .DPL_CMS_REPOSITORY_BRANCH }} {{ .DPL_CMS_REPOSITORY_URL }} {{ .DPL_CMS_DIRECTORY }}
       # Run `composer install` to create local module folder (cf. https://github.com/danskernesdigitalebibliotek/dpl-cms/blob/e59ef2a1f9f283a36222be7af05191c110b20cc0/composer.json#L212-L215)
       - task dev:compose -- exec phpfpm composer install
@@ -80,8 +84,8 @@ tasks:
 
   dev:compose:
     cmds:
-      - docker compose --profile pretix {{ .CLI_ARGS }}
-    # silent: true
+      - '{{ .DOCKER_COMPOSE | default "docker compose" }} --profile pretix {{ .CLI_ARGS }}'
+    silent: true
 
   dev:drush:
     cmds:
@@ -92,7 +96,56 @@ tasks:
     cmds:
       - task dev:compose -- exec --env PGPASSWORD=pretix pretix_database pg_dump --user=pretix pretix > .docker/pretix/dumps/pretix.sql
 
+  dev:pretix:reset-db:
+    prompt: "This will reset your pretix database. Continue?"
+    cmds:
+      # Remove the pretix database container
+      - task dev:compose -- rm pretix_database --stop --force
+      # Starting the container will load dump from .docker/pretix/dumps (cf. docker-compose.override.yml).
+      - task dev:compose -- up --detach
+
+  dev:pretix:ping-api:
+    vars:
+      API_TOKEN:
+        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
+    cmds:
+      - "task dev:compose -- exec phpfpm curl --header 'Authorization: Token {{ .API_TOKEN }}' {{ .TASK_PRETIX_URL }}/api/v1/organizers/"
+      # - "API_TOKEN=$(task dev:pretix:api-token) echo task dev:compose -- exec --env API_TOKEN phpfpm curl --header \"Authorization: Token $API_TOKEN\" {{ .TASK_PRETIX_URL }}/api/v1/organizers/"
+
   dev:code-analysis:
     cmds:
       # @todo run this inside phpfpm container
       - (cd ./dpl-cms && ./vendor/bin/phpstan --configuration=../phpstan.neon.dist)
+
+  dev:drupal:reset-pretix-config:
+    cmds:
+      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.url {{ .TASK_PRETIX_URL }}
+      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.organizer dpl-cms
+      # http://pretix.dpl-cms-develop.local.itkdev.dk/control/organizer/dpl-cms/team/1/
+      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.api_token $(task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')
+      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.template_event dpl-cms-default-template
+
+      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.maintain_copy --input-format=yaml true
+
+      - task dev:drush -- --yes config:set dpl_pretix.settings psp_elements.pretix_psp_meta_key PSP
+
+      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.capacity -- 87
+      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.maintain_copy --input-format=yaml true
+      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.ticket_type email_ticket
+
+      - task dev:drush -- --yes config:set dpl_pretix.settings event_form.weight -- '-9999'
+
+      - task dev:drush config:get dpl_pretix.settings
+
+
+  server:deploy:
+    preconditions:
+      - sh: '[ ! -z "{{ .BRANCH }}" ] || [ ! -z "{{ .DPL_PRETIX_VERSION }}" ]'
+        msg: |
+          Usage
+
+            task {{ .TASK }} BRANCH=branch-name DPL_PRETIX_VERSION=dpl_pretix-version
+
+        # Keep newline in msg
+    cmds:
+      - echo {{ .BRANCH }} {{ .DPL_PRETIX_VERSION }}
