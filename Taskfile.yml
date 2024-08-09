@@ -103,6 +103,8 @@ tasks:
       - task dev:compose -- rm pretix_database --stop --force
       # Starting the container will load dump from .docker/pretix/dumps (cf. docker-compose.override.yml).
       - task dev:compose -- up --detach
+      # https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#updates
+      - task dev:compose -- exec pretix pretix upgrade
 
   dev:pretix:ping-api:
     vars:
@@ -114,8 +116,8 @@ tasks:
 
   dev:code-analysis:
     cmds:
-      # @todo run this inside phpfpm container
-      - (cd ./dpl-cms && ./vendor/bin/phpstan --configuration=../phpstan.neon.dist)
+      # Copy our PHPStan config and use it.
+      - (cp phpstan.neon.dist dpl-cms/tmp.phpstan.neon.dist && docker compose exec phpfpm vendor/bin/phpstan --configuration=tmp.phpstan.neon.dist --verbose)
 
   dev:drupal:reset-pretix-config:
     cmds:

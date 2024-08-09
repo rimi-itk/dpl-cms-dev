@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+project_dir=$(cd $(dirname "$script_dir") && pwd)
+
+function drush() {
+    set -x
+    docker compose exec --no-TTY phpfpm vendor/bin/drush "$@"
+    set +x
+}
+
+read -p "Really reset pretix configuration ([yN])? " -n 1 -r
+echo
+if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+  exit 1
+fi
+
+
+cd $project_dir
+
+# drush --yes pm:uninstall dpl_pretix || true
+
+drush --yes pm:install dpl_pretix
+
+# drush config:delete dpl_pretix.settings || true
+drush config:get dpl_pretix.settings || true
+
+drush --yes config:set --input-format=yaml dpl_pretix.settings pretix - <<'EOF'
+
+prod:
+  domain: dpl-cms.dk
+  url: https://pretix.eu/
+  organizer: dpl-cms
+  api_token: p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
+  template_event: dpl-cms-default-template
+  event_slug_template: "{id}"
+
+test:
+  domain: dpl-cms-develop.local.itkdev.dk
+  url: http://pretix.dpl-cms-develop.local.itkdev.dk/
+  organizer: dpl-cms
+  api_token: p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
+  template_event: dpl-cms-default-template
+  event_slug_template: 'test-{id}'
+
+EOF
+
+drush --yes config:set --input-format=yaml dpl_pretix.settings libraries - <<'EOF'
+list:
+  12:
+    organizer: ''
+    api_token: ''
+  13:
+    organizer: ''
+    api_token: ''
+  14:
+    organizer: hest
+    api_token: hest-hyp
+  17:
+    organizer: ''
+    api_token: ''
+
+EOF
+
+drush --yes config:set --input-format=yaml dpl_pretix.settings psp_elements - <<'EOF'
+
+pretix_psp_meta_key: PSP
+list:
+  -
+    name: a
+    value: b
+  -
+    name: '123'
+    value: '456'
+
+EOF
+
+drush --yes config:set --input-format=yaml dpl_pretix.settings event_nodes - <<'EOF'
+
+maintain_copy: true
+capacity: 87
+ticket_type: email_ticket
+
+EOF
+
+drush --yes config:set --input-format=yaml dpl_pretix.settings event_form - <<'EOF'
+
+weight: -9999
+
+EOF
+
+drush config:get dpl_pretix.settings

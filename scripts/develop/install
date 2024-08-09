@@ -30,8 +30,8 @@ compose up --detach --build
 #compose exec --user root phpfpm bash -c 'ln -sf bash /bin/sh'
 compose exec phpfpm composer install
 
-git clone --branch develop https://github.com/danskernesdigitalebibliotek/dpl-cms dpl-cms
-git clone --branch dpl_pretix https://github.com/rimi-itk/dpl_pretix dpl-cms/web/sites/default/files/modules_local/dpl_pretix
+# git clone --branch develop https://github.com/danskernesdigitalebibliotek/dpl-cms dpl-cms
+# git clone --branch dpl_pretix https://github.com/rimi-itk/dpl_pretix dpl-cms/web/sites/default/files/modules_local/dpl_pretix
 
 cat >| dpl-cms/web/sites/default/settings.local.php <<'EOF'
 <?php
@@ -59,9 +59,9 @@ drush --yes pm:install dpl_pretix
 open $(drush --uri=$(itkdev-docker-compose url) user:login /admin/config/dpl_pretix)
 
 drush --yes config:set dpl_pretix.settings pretix.url http://pretix.dpl-cms-develop.local.itkdev.dk/
-drush --yes config:set dpl_pretix.settings pretix.organizer_slug dpl-cms
+drush --yes config:set dpl_pretix.settings pretix.organizer dpl-cms
 # http://pretix.dpl-cms-develop.local.itkdev.dk/control/organizer/dpl-cms/team/1/
-drush --yes config:set dpl_pretix.settings pretix.api_key p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
-drush --yes config:set dpl_pretix.settings pretix.template_event_slug dpl-cms-default-template
+drush --yes config:set dpl_pretix.settings pretix.api_token p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
+drush --yes config:set dpl_pretix.settings pretix.template_event dpl-cms-default-template
 
 drush config:get dpl_pretix.settings

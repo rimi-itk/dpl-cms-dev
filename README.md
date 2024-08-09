@@ -88,8 +88,7 @@ docker run --rm --volume "$PWD:/md" peterdavehello/markdownlint markdownlint --i
 ## Code analysis
 
 ``` shell name=code-analysis
-# Copy our PHPStan config and use it.
-(cp phpstan.neon.dist dpl-cms/tmp.phpstan.neon.dist && docker compose run --rm phpfpm vendor/bin/phpstan --configuration=tmp.phpstan.neon.dist)
+task dev:code-analysis
 ```
 
 ## Patches and other hacks
