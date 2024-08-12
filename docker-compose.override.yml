@@ -13,7 +13,7 @@ services:
       - ./dpl-cms:/app
 
   pretix:
-    image: pretix/standalone:latest
+    image: pretix/standalone:stable
     profiles:
       - pretix
     networks:

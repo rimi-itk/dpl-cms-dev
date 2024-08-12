@@ -1,6 +1,5 @@
 parameters:
   level: 8
-  checkGenericClassInNonGenericObjectType: false
   paths:
     - web/sites/default/files/modules_local/dpl_pretix/
   excludePaths:
@@ -12,6 +11,8 @@ parameters:
     - '#(Function|Method) (Drupal\\dpl_pretix\\|dpl_pretix_).+ has parameter \$(element|form|options) with no value type specified in iterable type array.#'
     # # Why are Pretix\ApiClient classes unknown?!
     # - '#Drupal\\dpl_pretix\\Pretix\\ApiClient\\#'
+
+    - identifier: missingType.generics
 
 
 # Local Variables:

@@ -102,22 +102,5 @@ We run into […… duplicated paths in URLs, such as
     rewrite ^/core/authorize.php/core/authorize.php(.*) /core/authorize.php$1 break;
 ```
 
-For production, this patch must be applied (cf. [Security check failure with reverse
-proxy](https://www.drupal.org/project/drupal/issues/2934570)):
-
-``` diff
-diff --git a/dpl-cms/vendor/symfony/http-foundation/Request.php b/dpl-cms/vendor/symfony/http-foundation/Request.php
-index b482a76..2746af4 100644
---- a/dpl-cms/vendor/symfony/http-foundation/Request.php
-+++ b/dpl-cms/vendor/symfony/http-foundation/Request.php
-@@ -1106,6 +1106,9 @@ public function getQueryString(): ?string
-      */
-     public function isSecure(): bool
-     {
-+        // @see https://www.drupal.org/project/drupal/issues/2934570
-+        return TRUE;
-+
-         if ($this->isFromTrustedProxy() && $proto = $this->getTrustedValues(self::HEADER_X_FORWARDED_PROTO)) {
-             return \in_array(strtolower($proto[0]), ['https', 'on', 'ssl', '1'], true);
-         }
-```
+For production, the patch in [`patches/reverse-proxy.patch`](patches/reverse-proxy.patch) must be applied (cf. [Security
+check failure with reverse proxy](https://www.drupal.org/project/drupal/issues/2934570)).
