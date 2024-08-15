@@ -6021,6 +6021,7 @@ COPY public.pretixbase_eventlock (event, date, token) FROM stdin;
 --
 
 COPY public.pretixbase_eventmetaproperty (id, name, "default", organizer_id, protected, required, filter_allowed, filter_public, public_label, "position", choices) FROM stdin;
+1	PSP	XG-0000000000-00000	1	f	f	t	f	{}	0	[]
 \.
 
 
@@ -6269,6 +6270,7 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 8	1	2024-06-11 08:23:50.546564+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00+01:00", "date_to": "2001-01-01T01:00:00+01:00", "frontpage_text": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "cs": "", "da": "dpl-cms-default-template", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	1	1	\N	t	f	\N	\N	1
 9	1	2024-06-11 08:23:50.555773+00	pretix.event.quota.added	{"id": 1, "itemvars": ["1-1"]}	20	1	1	\N	t	f	\N	\N	1
 10	1	2024-06-11 08:23:50.556486+00	pretix.subevent.quota.added	{"id": 1, "itemvars": ["1-1"]}	37	1	1	\N	t	f	\N	\N	1
+11	1	2024-08-15 07:45:05.941804+00	pretix.property.created	{"default": "XG-0000000000-00000", "name": "PSP"}	41	\N	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -7138,7 +7140,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventfooterlink_id_seq', 1, false);
 -- Name: pretixbase_eventmetaproperty_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, true);
 
 
 --
@@ -7306,7 +7308,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 10, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 11, true);
 
 
 --
