@@ -52,27 +52,10 @@ tasks:
 
       - |
         cat > {{ .DPL_CMS_DIRECTORY }}/web/sites/default/settings.local.php <<'EOF'
-        <?php
-
-        $settings['hash_salt'] = 'V-tz1Y86bnQ7IDugaKTbx0goQR64ewhdsWlscc00813DSYYuEf9ziG2Qqfo1zshlVQF_n37Lbg';
-
-        $databases['default']['default'] = [
-          'database' => getenv('DATABASE_DATABASE') ?: 'db',
-          'username' => getenv('DATABASE_USERNAME') ?: 'db',
-          'password' => getenv('DATABASE_PASSWORD') ?: 'db',
-          'host' => getenv('DATABASE_HOST') ?: 'mariadb',
-          'port' => getenv('DATABASE_PORT') ?: '',
-          'driver' => getenv('DATABASE_DRIVER') ?: 'mysql',
-          'prefix' => '',
-        ];
+        {{ .DPL_CMS_SETTINGS_LOCAL }}
         EOF
-      - task dev:drush -- --yes site:install --existing-config
 
-      - task dev:drush -- --yes cache:rebuild
-      - task dev:drush -- --yes pm:uninstall purge || true
-      - task dev:drush -- --yes pm:install devel dpl_example_content dpl_example_breadcrumb field_ui restui uuid_url views_ui dblog
-
-      - task dev:drush -- --yes pm:install dpl_pretix
+      - task dpl-cms:install
 
       - task dev:dpl-cms:open
 
@@ -89,6 +72,7 @@ tasks:
       - task dpl-cms:git -- pull
       - task dpl-cms:git -- log -10 --oneline
       - task dev:composer:install
+      # There's something fishy with the purger(s) config during import.
       - task dev:drush -- --yes pm:uninstall purge || true
       - task dev:drush -- deploy
       - task dev:drush -- --yes pm:uninstall purge || true
@@ -133,7 +117,13 @@ tasks:
       # Starting the container will load dump from .docker/pretix/dumps (cf. docker-compose.override.yml).
       - task dev:compose -- up --detach
       # https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#updates
-      # - task dev:compose -- exec pretix pretix upgrade
+      - task dev:compose -- exec pretix pretix upgrade
+
+  dev:pretix:db-load:
+    prompt: "This will reset your pretix database. Continue?"
+    cmds:
+      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix <<< "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix < .docker/pretix/dumps/pretix.sql
 
   dev:pretix:ping-api:
     vars:
@@ -167,6 +157,16 @@ tasks:
       - task dev:drush -- --yes config:set dpl_pretix.settings event_form.weight -- '-9999'
 
       - task dev:drush config:get dpl_pretix.settings
+
+  dpl-cms:install:
+    prompt: "(Re)install DPL CMS"
+    cmds:
+      - task dev:drush -- --yes site:install --existing-config
+      - task dev:drush -- --yes cache:rebuild
+      - task dev:drush -- --yes pm:uninstall purge || true
+      - task dev:drush -- --yes pm:install devel dpl_example_content dpl_example_breadcrumb field_ui restui uuid_url views_ui dblog
+
+      - task dev:drush -- --yes pm:install dpl_pretix
 
   dpl-cms:git:
     cmds:
