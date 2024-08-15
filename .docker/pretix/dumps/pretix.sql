@@ -16,6 +16,22 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: pretix
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO pretix;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pretix
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -6271,6 +6287,9 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 9	1	2024-06-11 08:23:50.555773+00	pretix.event.quota.added	{"id": 1, "itemvars": ["1-1"]}	20	1	1	\N	t	f	\N	\N	1
 10	1	2024-06-11 08:23:50.556486+00	pretix.subevent.quota.added	{"id": 1, "itemvars": ["1-1"]}	37	1	1	\N	t	f	\N	\N	1
 11	1	2024-08-15 07:45:05.941804+00	pretix.property.created	{"default": "XG-0000000000-00000", "name": "PSP"}	41	\N	1	\N	t	f	\N	\N	1
+12	1	2024-08-15 12:30:56.884866+00	pretix.team.invite.created	{"email": "dpl-cms@localhost"}	34	\N	1	\N	t	f	\N	\N	1
+13	2	2024-08-15 12:32:04.547084+00	pretix.control.auth.user.created	{}	5	\N	2	\N	t	f	\N	\N	\N
+14	1	2024-08-15 12:32:04.551132+00	pretix.team.member.joined	{"email": "dpl-cms@localhost", "invite_email": "dpl-cms@localhost", "user": 2}	34	\N	\N	\N	t	f	\N	\N	1
 \.
 
 
@@ -6304,6 +6323,7 @@ COPY public.pretixbase_membershiptype (id, name, transferable, allow_parallel_us
 
 COPY public.pretixbase_notificationsetting (id, action_type, method, event_id, user_id, enabled) FROM stdin;
 1	pretix.event.order.refund.requested	mail	\N	1	t
+2	pretix.event.order.refund.requested	mail	\N	2	t
 \.
 
 
@@ -6606,6 +6626,7 @@ COPY public.pretixbase_team_limit_events (id, team_id, event_id) FROM stdin;
 
 COPY public.pretixbase_team_members (id, team_id, user_id) FROM stdin;
 1	1	1
+2	1	2
 \.
 
 
@@ -6648,6 +6669,7 @@ COPY public.pretixbase_u2fdevice (id, name, confirmed, json_data, user_id) FROM 
 
 COPY public.pretixbase_user (id, password, last_login, email, is_active, is_staff, date_joined, locale, timezone, require_2fa, fullname, notifications_send, notifications_token, auth_backend, session_token, needs_password_change, auth_backend_identifier) FROM stdin;
 1	argon2$argon2id$v=19$m=102400,t=2,p=8$R0dFZ1JEQmJPOFZ4dHdmNFRaY3M0aw$mcPPnvZrdw+AOOHUAZnV0J+siYIoYVIiAvivF7HGmSM	2024-06-11 08:00:49.165989+00	admin@localhost	t	t	2024-06-03 21:58:20.960446+00	en	UTC	f	\N	t	kRVsabIwz15RtFC8oTaIL68tgbdEFmyG	native	7jinsT4y1Pu19fzqXvvlnSwQyfgJpyGN	f	\N
+2	argon2$argon2id$v=19$m=102400,t=2,p=8$WHJjd1c0WDBoQWluSHpqRzdYUHZqWg$HEnAgiyA1K4PuayNvYNVsNQ1ir7FId2aVyT8IYDLvj0	2024-08-15 12:32:04.548641+00	dpl-cms@localhost	t	f	2024-08-15 12:32:04.502223+00	en	UTC	f	\N	t	NGAE1pkaJsLHwtHyX9R0gsmOLYOC0Fgr	native	2UESalJup24TUV3oBhEHckbk7nl3VRqO	f	\N
 \.
 
 
@@ -7119,7 +7141,7 @@ SELECT pg_catalog.setval('public.pretixbase_discount_limit_sales_channels_id_seq
 -- Name: pretixbase_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 2, true);
 
 
 --
@@ -7308,7 +7330,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 11, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 14, true);
 
 
 --
@@ -7336,7 +7358,7 @@ SELECT pg_catalog.setval('public.pretixbase_membershiptype_id_seq', 1, false);
 -- Name: pretixbase_notificationsetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_notificationsetting_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_notificationsetting_id_seq', 2, true);
 
 
 --
@@ -7378,7 +7400,7 @@ SELECT pg_catalog.setval('public.pretixbase_orderrefund_id_seq', 1, false);
 -- Name: pretixbase_organizer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_organizer_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_organizer_id_seq', 2, true);
 
 
 --
@@ -7392,7 +7414,7 @@ SELECT pg_catalog.setval('public.pretixbase_organizerfooterlink_id_seq', 1, fals
 -- Name: pretixbase_organizersetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_organizersetting_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_organizersetting_id_seq', 2, true);
 
 
 --
@@ -7469,7 +7491,7 @@ SELECT pg_catalog.setval('public.pretixbase_revokedticketsecret_id_seq', 1, fals
 -- Name: pretixbase_saleschannel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_saleschannel_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_saleschannel_id_seq', 2, true);
 
 
 --
@@ -7574,7 +7596,7 @@ SELECT pg_catalog.setval('public.pretixbase_team_limit_events_id_seq', 1, false)
 -- Name: pretixbase_team_members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_team_members_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_team_members_id_seq', 2, true);
 
 
 --
@@ -7588,7 +7610,7 @@ SELECT pg_catalog.setval('public.pretixbase_teamapitoken_id_seq', 1, true);
 -- Name: pretixbase_teaminvite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_teaminvite_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_teaminvite_id_seq', 1, true);
 
 
 --
@@ -7616,7 +7638,7 @@ SELECT pg_catalog.setval('public.pretixbase_user_groups_id_seq', 1, false);
 -- Name: pretixbase_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_user_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_user_id_seq', 2, true);
 
 
 --
@@ -14196,6 +14218,13 @@ ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
 
 ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
     ADD CONSTRAINT ticketoutputpdf_ticketlayoutitem_layout_id_9b76e49f_fk FOREIGN KEY (layout_id) REFERENCES public.ticketoutputpdf_ticketlayout(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pretix
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
 --
