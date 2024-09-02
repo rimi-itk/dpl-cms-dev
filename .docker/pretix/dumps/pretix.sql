@@ -5964,6 +5964,7 @@ COPY public.pretixbase_discount_limit_sales_channels (id, discount_id, saleschan
 
 COPY public.pretixbase_event (id, name, slug, currency, date_from, date_to, is_public, presale_end, presale_start, plugins, organizer_id, live, location, date_admission, comment, has_subevents, testmode, seating_plan_id, geo_lat, geo_lon, last_modified, all_sales_channels) FROM stdin;
 1	{"da": "dpl-cms-default-template"}	dpl-cms-default-template	DKK	2000-12-31 23:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-06-10 13:40:04.514881+00	t
+4	{"da": "dpl-cms-default-template-no-product-variations"}	dpl-cms-default-template-no-product-variations	DKK	2001-01-01 00:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-08-28 11:01:06.957924+00	t
 \.
 
 
@@ -6013,6 +6014,19 @@ COPY public.pretixbase_event_settingsstore (id, key, value, object_id) FROM stdi
 33	presale_widget_css_checksum	bd84297e08e69618288e6abb3db27c9ffbd18b41	1
 13	locales	["da"]	1
 29	confirm_texts	[]	1
+52	invoice_renderer	modern1	4
+53	invoice_include_expire_date	True	4
+54	invoice_renderer_highlight_order_code	True	4
+55	ticketoutput_pdf__enabled	True	4
+56	ticketoutput_passbook__enabled	True	4
+57	event_list_type	calendar	4
+58	invoice_email_attachment	True	4
+59	name_scheme	given_family	4
+60	payment_banktransfer_invoice_immediately	True	4
+61	low_availability_percentage	10	4
+62	timezone	UTC	4
+63	locale	da	4
+64	locales	["da"]	4
 \.
 
 
@@ -6179,6 +6193,7 @@ COPY public.pretixbase_invoiceline (id, description, gross_value, tax_value, tax
 
 COPY public.pretixbase_item (id, name, active, description, default_price, admission, "position", picture, available_from, available_until, category_id, event_id, free_price, hide_without_voucher, require_voucher, allow_cancel, max_per_order, min_per_order, tax_rule_id, checkin_attention, internal_name, original_price, require_approval, generate_tickets, require_bundling, show_quota_left, hidden_if_available_id, allow_waitinglist, issue_giftcard, grant_membership_duration_days, grant_membership_duration_like_event, grant_membership_duration_months, require_membership, grant_membership_type_id, require_membership_hidden, personalized, validity_dynamic_duration_days, validity_dynamic_duration_hours, validity_dynamic_duration_minutes, validity_dynamic_duration_months, validity_dynamic_start_choice, validity_dynamic_start_choice_day_limit, validity_fixed_from, validity_fixed_until, validity_mode, media_policy, media_type, free_price_suggestion, hidden_if_item_available_id, checkin_text, available_from_mode, available_until_mode, all_sales_channels) FROM stdin;
 1	{"da": "Billet"}	t	\N	0.00	t	1		\N	\N	\N	1	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
+3	{"da": "Biilet"}	t	\N	0.00	t	1		\N	\N	\N	4	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
 \.
 
 
@@ -6290,6 +6305,21 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 12	1	2024-08-15 12:30:56.884866+00	pretix.team.invite.created	{"email": "dpl-cms@localhost"}	34	\N	1	\N	t	f	\N	\N	1
 13	2	2024-08-15 12:32:04.547084+00	pretix.control.auth.user.created	{}	5	\N	2	\N	t	f	\N	\N	\N
 14	1	2024-08-15 12:32:04.551132+00	pretix.team.member.joined	{"email": "dpl-cms@localhost", "invite_email": "dpl-cms@localhost", "user": 2}	34	\N	\N	\N	t	f	\N	\N	1
+21	1	2024-08-28 11:00:43.472079+00	pretix.event.deleted	{"event_id": 3, "logentries": [20, 19, 18, 17, 16, 15], "name": "dpl-cms-default-template-no-product-variations", "slug": "dpl-cms-default-template-no-product-variations"}	17	\N	1	\N	t	f	\N	\N	1
+15	3	2024-08-28 10:56:29.508069+00	pretix.event.added	{}	9	\N	1	\N	t	f	\N	\N	1
+16	3	2024-08-28 10:56:29.510457+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": true, "locale": "en", "locales": ["en", "da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "dpl-cms-default-template-no-product-variations", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-default-template-no-product-variations", "tax_rate": null, "timezone": "UTC"}	9	\N	1	\N	t	f	\N	\N	1
+17	2	2024-08-28 10:56:55.183489+00	pretix.event.item.added	{"default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Billet", "de": "", "de-informal": "", "el": "", "en": "Ticket", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	11	\N	1	\N	t	f	\N	\N	1
+18	2	2024-08-28 10:58:12.44513+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00Z", "date_to": null, "frontpage_text": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "dpl-cms-default-template-no-product-variations", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	\N	1	\N	t	f	\N	\N	1
+19	2	2024-08-28 10:58:12.456007+00	pretix.event.quota.added	{"id": 2, "itemvars": ["2"]}	20	\N	1	\N	t	f	\N	\N	1
+20	2	2024-08-28 10:58:12.457042+00	pretix.subevent.quota.added	{"id": 2, "itemvars": ["2"]}	37	\N	1	\N	t	f	\N	\N	1
+22	4	2024-08-28 11:01:06.960754+00	pretix.event.added	{}	9	4	1	\N	t	f	\N	\N	1
+23	4	2024-08-28 11:01:06.963762+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": true, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-default-template-no-product-variations", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-default-template-no-product-variations", "tax_rate": null, "timezone": "UTC"}	9	4	1	\N	t	f	\N	\N	1
+24	3	2024-08-28 11:01:26.804467+00	pretix.event.item.added	{"default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Biilet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	11	4	1	\N	t	f	\N	\N	1
+25	3	2024-08-28 11:02:24.916645+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00Z", "date_to": null, "frontpage_text": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-default-template-no-product-variations", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	4	1	\N	t	f	\N	\N	1
+26	3	2024-08-28 11:02:24.926732+00	pretix.event.quota.added	{"id": 3, "itemvars": ["3"]}	20	4	1	\N	t	f	\N	\N	1
+27	3	2024-08-28 11:02:24.927509+00	pretix.subevent.quota.added	{"id": 3, "itemvars": ["3"]}	37	4	1	\N	t	f	\N	\N	1
+28	4	2024-08-28 11:02:41.939585+00	pretix.event.quota.added	{"close_when_sold_out": false, "ignore_for_event_availability": false, "itemvars": ["3"], "name": "Billetter", "release_after_exit": false, "size": null, "subevent": {"id": 3, "type": "SubEvent"}}	20	4	1	\N	t	f	\N	\N	1
+29	3	2024-08-28 11:03:00.634376+00	pretix.event.quota.deleted	{}	20	4	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -6439,6 +6469,7 @@ COPY public.pretixbase_questionoption (id, answer, question_id, "position", iden
 
 COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_sold_out, closed, release_after_exit, ignore_for_event_availability) FROM stdin;
 1	Tickets	\N	1	1	f	f	f	f
+4	Billetter	\N	4	3	f	f	f	f
 \.
 
 
@@ -6448,6 +6479,7 @@ COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_
 
 COPY public.pretixbase_quota_items (id, quota_id, item_id) FROM stdin;
 1	1	1
+4	4	3
 \.
 
 
@@ -6567,6 +6599,7 @@ COPY public.pretixbase_staffsessionauditlog (id, datetime, url, session_id, impe
 
 COPY public.pretixbase_subevent (id, active, name, date_from, date_to, date_admission, presale_end, presale_start, location, event_id, frontpage_text, is_public, seating_plan_id, geo_lat, geo_lon, last_modified, comment) FROM stdin;
 1	t	{"da": "dpl-cms-default-template"}	2000-12-31 23:00:00+00	2001-01-01 00:00:00+00	\N	\N	\N	{}	1	{}	t	\N	\N	\N	2024-06-11 08:26:50.804554+00	
+3	t	{"da": "dpl-cms-default-template-no-product-variations"}	2001-01-01 00:00:00+00	\N	\N	\N	\N	{}	4	{}	t	\N	\N	\N	2024-08-28 11:02:24.911956+00	
 \.
 
 
@@ -6575,6 +6608,7 @@ COPY public.pretixbase_subevent (id, active, name, date_from, date_to, date_admi
 --
 
 COPY public.pretixbase_subeventitem (id, price, item_id, subevent_id, disabled, available_from, available_until) FROM stdin;
+2	\N	3	3	f	\N	\N
 \.
 
 
@@ -7141,7 +7175,7 @@ SELECT pg_catalog.setval('public.pretixbase_discount_limit_sales_channels_id_seq
 -- Name: pretixbase_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 4, true);
 
 
 --
@@ -7176,7 +7210,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventmetavalue_id_seq', 1, false);
 -- Name: pretixbase_eventsetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 33, true);
+SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 64, true);
 
 
 --
@@ -7246,7 +7280,7 @@ SELECT pg_catalog.setval('public.pretixbase_invoiceline_id_seq', 1, false);
 -- Name: pretixbase_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 3, true);
 
 
 --
@@ -7330,7 +7364,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 14, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 29, true);
 
 
 --
@@ -7456,14 +7490,14 @@ SELECT pg_catalog.setval('public.pretixbase_questionoption_id_seq', 1, false);
 -- Name: pretixbase_quota_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 4, true);
 
 
 --
 -- Name: pretixbase_quota_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 4, true);
 
 
 --
@@ -7547,14 +7581,14 @@ SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 19, tr
 -- Name: pretixbase_subevent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_subevent_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_subevent_id_seq', 3, true);
 
 
 --
 -- Name: pretixbase_subeventitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_subeventitem_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_subeventitem_id_seq', 2, true);
 
 
 --

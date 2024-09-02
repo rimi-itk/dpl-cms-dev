@@ -27,11 +27,18 @@ vars:
 
     $config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
 
+    // https://www.drupal.org/docs/getting-started/installing-drupal/using-a-load-balancer-or-reverse-proxy
+    $settings['reverse_proxy'] = TRUE;
+    $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
+
     $settings['config_exclude_modules'] = ['dpl_pretix'];
 
+  DPL_CMS_DOMAIN: '{{ .TASK_DPL_CMS_DOMAIN | default "dpl-cms-develop.local.itkdev.dk" }}'
   DPL_CMS_URL: '{{ .TASK_DPL_CMS_URL | default "https://dpl-cms-develop.local.itkdev.dk" }}'
   DOCKER_COMPOSE: '{{ .TASK_DOCKER_COMPOSE | default "docker compose" }}'
   COMPOSER_INSTALL_ARGUMENTS: '{{ .TASK_COMPOSER_INSTALL_ARGUMENTS | default "" }}'
+  PRETIX_URL: '{{ .TASK_PRETIX_URL | default "https://pretix.dpl-cms-develop.local.itkdev.dk" }}'
+  PRETIX_ORGANIZER: '{{ .TASK_PRETIX_ORGANIZER | default "dpl-cms" }}'
 
 tasks:
   dev:install:
@@ -98,7 +105,7 @@ tasks:
 
   dev:drush:
     cmds:
-      - task dev:compose -- exec phpfpm vendor/bin/drush --uri={{ .DPL_CMS_URL }} {{ .CLI_ARGS }}
+      - task dev:compose -- exec --no-TTY phpfpm vendor/bin/drush --uri={{ .DPL_CMS_URL }} {{ .CLI_ARGS }}
     silent: true
 
   dev:pretix:db-dump:
@@ -130,8 +137,8 @@ tasks:
       API_TOKEN:
         sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
     cmds:
-      - "task dev:compose -- exec phpfpm curl --header 'Authorization: Token {{ .API_TOKEN }}' {{ .TASK_PRETIX_URL }}/api/v1/organizers/"
-      # - "API_TOKEN=$(task dev:pretix:api-token) echo task dev:compose -- exec --env API_TOKEN phpfpm curl --header \"Authorization: Token $API_TOKEN\" {{ .TASK_PRETIX_URL }}/api/v1/organizers/"
+      - "task dev:compose -- exec phpfpm curl --header 'Authorization: Token {{ .API_TOKEN }}' {{ .PRETIX_URL }}/api/v1/organizers/"
+      # - "API_TOKEN=$(task dev:pretix:api-token) echo task dev:compose -- exec --env API_TOKEN phpfpm curl --header \"Authorization: Token $API_TOKEN\" {{ .PRETIX_URL }}/api/v1/organizers/"
 
   dev:code-analysis:
     cmds:
@@ -139,24 +146,62 @@ tasks:
       - (cp phpstan.neon.dist dpl-cms/tmp.phpstan.neon.dist && {{ .DOCKER_COMPOSE }} exec phpfpm vendor/bin/phpstan --configuration=tmp.phpstan.neon.dist --verbose)
 
   dev:drupal:reset-pretix-config:
+    prompt: "Reset pretix config in DPL CMS"
+    vars:
+      PRETIX_API_TOKEN:
+        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
     cmds:
-      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.url {{ .TASK_PRETIX_URL }}
-      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.organizer dpl-cms
-      # http://pretix.dpl-cms-develop.local.itkdev.dk/control/organizer/dpl-cms/team/1/
-      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.api_token $(task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')
-      - task dev:drush -- --yes config:set dpl_pretix.settings pretix.template_event dpl-cms-default-template
+      # Clean up
+      - task dev:drush -- --yes config:get dpl_pretix.settings || true
+      - task dev:drush -- --yes config:delete dpl_pretix.settings || true
 
-      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.maintain_copy --input-format=yaml true
+      - |
+        task dev:drush -- --yes config:set --input-format=yaml dpl_pretix.settings pretix - <<'EOF'
+        prod:
+          domain: prod-{{ .DPL_CMS_DOMAIN }}
+          url: {{ .PRETIX_URL }}
+          organizer: {{ .PRETIX_ORGANIZER }}
+          api_token: {{ .PRETIX_API_TOKEN }}
+          template_events: |
+            dpl-cms-default-template: dpl-cms-default-template
+          event_slug_template: "prod-{id}"
 
-      - task dev:drush -- --yes config:set dpl_pretix.settings psp_elements.pretix_psp_meta_key PSP
+        test:
+          domain: {{ .DPL_CMS_DOMAIN }}
+          url: {{ .PRETIX_URL }}
+          organizer: {{ .PRETIX_ORGANIZER }}
+          api_token: {{ .PRETIX_API_TOKEN }}
+          template_events: |
+            dpl-cms-default-template: dpl-cms-default-template
+            dpl-cms-default-template-no-product-variations: dpl-cms-default-template-no-product-variations
+          event_slug_template: 'test-{id}'
 
-      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.capacity -- 87
-      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.maintain_copy --input-format=yaml true
-      - task dev:drush -- --yes config:set dpl_pretix.settings event_nodes.ticket_type email_ticket
+        EOF
 
-      - task dev:drush -- --yes config:set dpl_pretix.settings event_form.weight -- '-9999'
+      - |
+        task dev:drush -- --yes config:set --input-format=yaml dpl_pretix.settings psp_elements - <<'EOF'
+        pretix_psp_meta_key: PSP
+        list:
+          -
+            name: PSP-0
+            value: psp-0000-0000
+          -
+            name: PSP-1
+            value: psp-0000-0001
+          -
+            name: PSP-2
+            value: psp-0000-0002
 
-      - task dev:drush config:get dpl_pretix.settings
+        EOF
+
+      - |
+        task dev:drush -- --yes config:set --input-format=yaml dpl_pretix.settings event_nodes - <<'EOF'
+        maintain_copy: true
+        capacity: 87
+
+        EOF
+
+      - task dev:drush -- config:get dpl_pretix.settings || true
 
   dpl-cms:install:
     prompt: "(Re)install DPL CMS"
@@ -171,6 +216,10 @@ tasks:
   dpl-cms:git:
     cmds:
       - git -C {{ .DPL_CMS_DIRECTORY }} {{ .CLI_ARGS }}
+
+  dpl-cms:db-dump:
+    cmds:
+      - task dev:drush -- sql:dump --extra-dump=--no-tablespaces --structure-tables-key=common > .docker/dpl-cms/dumps/dpl-cms.sql
 
   server:deploy:
     preconditions:

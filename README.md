@@ -67,8 +67,8 @@ open "http://pretix.dpl-cms-develop.local.itkdev.dk/control"
 # https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#next-steps
 
 docker compose exec --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix
-docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix <<< 'SELECT * FROM pretixbase_teamapitoken'
-docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
+docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix <<< "SELECT token FROM pretixbase_teamapitoken WHERE name = 'dpl-cms'"
+docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< "SELECT token FROM pretixbase_teamapitoken WHERE name = 'dpl-cms'"
 
 docker compose exec phpfpm vendor/bin/drush --yes config:set dpl_pretix.settings pretix.api_key $(docker compose exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken')
 
@@ -104,3 +104,21 @@ We run into […… duplicated paths in URLs, such as
 
 For production, the patch in [`patches/reverse-proxy.patch`](patches/reverse-proxy.patch) must be applied (cf. [Security
 check failure with reverse proxy](https://www.drupal.org/project/drupal/issues/2934570)).
+
+
+## Code snippets
+
+``` shell name=pretix-reset-all-data
+task dev:drush -- sql:query "TRUNCATE dpl_pretix_events"
+task dev:pretix:db-load --yes
+```
+
+``` shell name=re-synchronize-event
+task dev:drush -- --yes dpl_pretix:pretix-event:delete «event id» || true
+
+task dev:drush -- --yes dpl_pretix:event:synchronize «event id»
+```
+
+``` shell name=synchronize-event
+task dev:drush -- --yes dpl_pretix:event:synchronize «event id» --verbose
+```

@@ -34,46 +34,52 @@ prod:
   url: https://pretix.eu/
   organizer: dpl-cms
   api_token: p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
-  template_event: dpl-cms-default-template
-  event_slug_template: "{id}"
+  template_events: |
+    dpl-cms-default-template: dpl-cms-default-template
+  event_slug_template: "prod-{id}"
 
 test:
   domain: dpl-cms-develop.local.itkdev.dk
   url: http://pretix.dpl-cms-develop.local.itkdev.dk/
   organizer: dpl-cms
   api_token: p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i
-  template_event: dpl-cms-default-template
+  template_events: |
+    dpl-cms-default-template: dpl-cms-default-template
+    dpl-cms-default-template-no-product-variations: dpl-cms-default-template-no-product-variations
   event_slug_template: 'test-{id}'
 
 EOF
 
-drush --yes config:set --input-format=yaml dpl_pretix.settings libraries - <<'EOF'
-list:
-  12:
-    organizer: ''
-    api_token: ''
-  13:
-    organizer: ''
-    api_token: ''
-  14:
-    organizer: hest
-    api_token: hest-hyp
-  17:
-    organizer: ''
-    api_token: ''
+# drush --yes config:set --input-format=yaml dpl_pretix.settings libraries - <<'EOF'
+# list:
+#   12:
+#     organizer: ''
+#     api_token: ''
+#   13:
+#     organizer: ''
+#     api_token: ''
+#   14:
+#     organizer: hest
+#     api_token: hest-hyp
+#   17:
+#     organizer: ''
+#     api_token: ''
 
-EOF
+# EOF
 
 drush --yes config:set --input-format=yaml dpl_pretix.settings psp_elements - <<'EOF'
 
 pretix_psp_meta_key: PSP
 list:
   -
-    name: a
-    value: b
+    name: PSP-0
+    value: psp-0000-0000
   -
-    name: '123'
-    value: '456'
+    name: PSP-1
+    value: psp-0000-0001
+  -
+    name: PSP-2
+    value: psp-0000-0002
 
 EOF
 
