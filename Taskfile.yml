@@ -27,6 +27,10 @@ vars:
 
     $config['system.logging']['error_level'] = ERROR_REPORTING_DISPLAY_VERBOSE;
 
+    // https://www.drupal.org/docs/getting-started/installing-drupal/using-a-load-balancer-or-reverse-proxy
+    $settings['reverse_proxy'] = TRUE;
+    $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR']];
+
     $settings['config_exclude_modules'] = ['dpl_pretix'];
 
   DPL_CMS_URL: '{{ .TASK_DPL_CMS_URL | default "https://dpl-cms-develop.local.itkdev.dk" }}'
@@ -171,6 +175,10 @@ tasks:
   dpl-cms:git:
     cmds:
       - git -C {{ .DPL_CMS_DIRECTORY }} {{ .CLI_ARGS }}
+
+  dpl-cms:db-dump:
+    cmds:
+      - task dev:drush -- sql:dump --extra-dump=--no-tablespaces --structure-tables-key=common > .docker/dpl-cms/dumps/dpl-cms.sql
 
   server:deploy:
     preconditions:
