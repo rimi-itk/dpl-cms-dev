@@ -5843,6 +5843,7 @@ COPY public.pretixbase_checkin (id, datetime, position_id, nonce, list_id, auto_
 --
 
 COPY public.pretixbase_checkinlist (id, name, all_products, event_id, subevent_id, include_pending, allow_entry_after_exit, allow_multiple_entries, rules, exit_all_at, addon_match, consider_tickets_used, ignore_in_statistics) FROM stdin;
+1	Standard	t	5	\N	f	t	f	{}	\N	f	t	f
 \.
 
 
@@ -5965,6 +5966,7 @@ COPY public.pretixbase_discount_limit_sales_channels (id, discount_id, saleschan
 COPY public.pretixbase_event (id, name, slug, currency, date_from, date_to, is_public, presale_end, presale_start, plugins, organizer_id, live, location, date_admission, comment, has_subevents, testmode, seating_plan_id, geo_lat, geo_lon, last_modified, all_sales_channels) FROM stdin;
 1	{"da": "dpl-cms-default-template"}	dpl-cms-default-template	DKK	2000-12-31 23:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-06-10 13:40:04.514881+00	t
 4	{"da": "dpl-cms-default-template-no-product-variations"}	dpl-cms-default-template-no-product-variations	DKK	2001-01-01 00:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-08-28 11:01:06.957924+00	t
+5	{"da": "dpl-cms-template-single"}	dpl-cms-template-single	DKK	2001-01-01 00:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin,pretix.plugins.ticketoutputpdf	1	f	{}	\N	\N	f	t	\N	\N	\N	2024-09-02 12:29:51.449737+00	t
 \.
 
 
@@ -6027,6 +6029,30 @@ COPY public.pretixbase_event_settingsstore (id, key, value, object_id) FROM stdi
 62	timezone	UTC	4
 63	locale	da	4
 64	locales	["da"]	4
+65	invoice_renderer	modern1	5
+66	invoice_include_expire_date	True	5
+67	invoice_renderer_highlight_order_code	True	5
+69	ticketoutput_passbook__enabled	True	5
+70	event_list_type	calendar	5
+71	invoice_email_attachment	True	5
+72	name_scheme	given_family	5
+73	payment_banktransfer_invoice_immediately	True	5
+74	low_availability_percentage	10	5
+75	timezone	UTC	5
+76	locale	da	5
+77	locales	["da"]	5
+78	ticket_download	True	5
+68	ticketoutput_pdf__enabled	True	5
+79	show_quota_left	False	5
+80	waiting_list_enabled	True	5
+81	attendee_names_required	False	5
+82	contact_mail		5
+83	imprint_url		5
+84	payment_free__fee_reverse_calc	True	5
+85	payment_boxoffice__fee_reverse_calc	True	5
+86	payment_offsetting__fee_reverse_calc	True	5
+87	payment_manual__fee_reverse_calc	True	5
+88	payment_giftcard__fee_reverse_calc	True	5
 \.
 
 
@@ -6194,6 +6220,7 @@ COPY public.pretixbase_invoiceline (id, description, gross_value, tax_value, tax
 COPY public.pretixbase_item (id, name, active, description, default_price, admission, "position", picture, available_from, available_until, category_id, event_id, free_price, hide_without_voucher, require_voucher, allow_cancel, max_per_order, min_per_order, tax_rule_id, checkin_attention, internal_name, original_price, require_approval, generate_tickets, require_bundling, show_quota_left, hidden_if_available_id, allow_waitinglist, issue_giftcard, grant_membership_duration_days, grant_membership_duration_like_event, grant_membership_duration_months, require_membership, grant_membership_type_id, require_membership_hidden, personalized, validity_dynamic_duration_days, validity_dynamic_duration_hours, validity_dynamic_duration_minutes, validity_dynamic_duration_months, validity_dynamic_start_choice, validity_dynamic_start_choice_day_limit, validity_fixed_from, validity_fixed_until, validity_mode, media_policy, media_type, free_price_suggestion, hidden_if_item_available_id, checkin_text, available_from_mode, available_until_mode, all_sales_channels) FROM stdin;
 1	{"da": "Billet"}	t	\N	0.00	t	1		\N	\N	\N	1	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
 3	{"da": "Biilet"}	t	\N	0.00	t	1		\N	\N	\N	4	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
+4	{"da": "Almindelig billet"}	t	\N	35.00	t	0		\N	\N	1	5	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
 \.
 
 
@@ -6234,6 +6261,7 @@ COPY public.pretixbase_itembundle (id, count, designated_price, base_item_id, bu
 --
 
 COPY public.pretixbase_itemcategory (id, name, "position", event_id, description, is_addon, internal_name) FROM stdin;
+1	{"ar": "\\u062a\\u0630\\u0627\\u0643\\u0631", "ca": "Tiquets", "cs": "Vstupenky", "da": "Billetter", "de": "Tickets", "de-informal": "Tickets", "el": "\\u0395\\u03b9\\u03c3\\u03b9\\u03c4\\u03ae\\u03c1\\u03b9\\u03b1", "en": "Tickets", "es": "Entradas", "fr": "Billets", "id": "Tiket", "it": "Biglietti", "lv": "Bi\\u013cetes", "nb-no": "Billetter", "nl": "Tickets", "nl-informal": "Kaartjes", "pl": "Bilety", "pt-pt": "Bilhetes", "ro": "Bilete", "ru": "Tickets", "sk": "Vstupenky", "sv": "Biljetter", "tr": "Biletler", "uk": "\\u041a\\u0432\\u0438\\u0442\\u043a\\u0438", "zh-hans": "\\u7968", "zh-hant": "\\u9580\\u7968"}	0	5		f	\N
 \.
 
 
@@ -6320,6 +6348,13 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 27	3	2024-08-28 11:02:24.927509+00	pretix.subevent.quota.added	{"id": 3, "itemvars": ["3"]}	37	4	1	\N	t	f	\N	\N	1
 28	4	2024-08-28 11:02:41.939585+00	pretix.event.quota.added	{"close_when_sold_out": false, "ignore_for_event_availability": false, "itemvars": ["3"], "name": "Billetter", "release_after_exit": false, "size": null, "subevent": {"id": 3, "type": "SubEvent"}}	20	4	1	\N	t	f	\N	\N	1
 29	3	2024-08-28 11:03:00.634376+00	pretix.event.quota.deleted	{}	20	4	1	\N	t	f	\N	\N	1
+30	5	2024-09-02 12:29:37.795382+00	pretix.event.added	{}	9	5	1	\N	t	f	\N	\N	1
+31	5	2024-09-02 12:29:37.801002+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": false, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-template-single", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-template-single", "tax_rate": null, "timezone": "UTC"}	9	5	1	\N	t	f	\N	\N	1
+32	5	2024-09-02 12:29:51.197132+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.ticketoutputpdf"}	9	5	1	\N	t	f	\N	\N	1
+33	5	2024-09-02 12:29:51.209335+00	pretix.event.settings	{}	9	5	1	\N	t	f	\N	\N	1
+34	1	2024-09-02 12:29:51.430853+00	pretix.event.category.added	{"name": "Tickets"}	12	5	1	\N	t	f	\N	\N	1
+35	4	2024-09-02 12:29:51.438333+00	pretix.event.item.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	11	5	1	\N	t	f	\N	\N	1
+36	5	2024-09-02 12:29:51.442871+00	pretix.event.quota.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	20	5	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -6470,6 +6505,7 @@ COPY public.pretixbase_questionoption (id, answer, question_id, "position", iden
 COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_sold_out, closed, release_after_exit, ignore_for_event_availability) FROM stdin;
 1	Tickets	\N	1	1	f	f	f	f
 4	Billetter	\N	4	3	f	f	f	f
+5	Almindelig billet	100	5	\N	f	f	f	f
 \.
 
 
@@ -6480,6 +6516,7 @@ COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_
 COPY public.pretixbase_quota_items (id, quota_id, item_id) FROM stdin;
 1	1	1
 4	4	3
+5	5	4
 \.
 
 
@@ -6817,6 +6854,7 @@ COPY public.stripe_registeredapplepaydomain (id, domain, account) FROM stdin;
 --
 
 COPY public.ticketoutputpdf_ticketlayout (id, "default", name, layout, background, event_id) FROM stdin;
+1	t	Default layout	[{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"274.60",\n    "fontsize":"16.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"175.00",\n    "content":"event_name",\n    "text":"Sample event name",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"262.90",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"itemvar",\n    "text":"Sample product – sample variation",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"252.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"attendee_name",\n    "text":"John Doe",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"242.10",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_begin",\n    "text":"2016-05-31 20:00",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"231.70",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"seat",\n    "text":"Ground floor, Row 3, Seat 4",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"204.80",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_location",\n    "text":"Random City",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"30.00",\n    "content":"order",\n    "text":"A1B2C",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"52.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"45.00",\n    "content":"price",\n    "text":"123.45 EUR",\n    "align":"right"\n},\n{\n    "type":"textarea",\n    "left":"102.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"90.00",\n    "content":"secret",\n    "text":"tdmruoekvkpbv1o2mv8xccvqcikvr58u",\n    "align":"left"\n},\n{\n    "type":"barcodearea",\n    "left":"130.40",\n    "bottom":"204.50",\n    "size":"64.00",\n    "content":"secret"\n},\n{\n    "type":"poweredby",\n    "left":"88.72",\n    "bottom":"10.00",\n    "size":"20.00",\n    "content":"dark"\n}]		5
 \.
 
 
@@ -7084,7 +7122,7 @@ SELECT pg_catalog.setval('public.pretixbase_checkinlist_gates_id_seq', 1, false)
 -- Name: pretixbase_checkinlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_checkinlist_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_checkinlist_id_seq', 1, true);
 
 
 --
@@ -7175,7 +7213,7 @@ SELECT pg_catalog.setval('public.pretixbase_discount_limit_sales_channels_id_seq
 -- Name: pretixbase_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 4, true);
+SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 5, true);
 
 
 --
@@ -7210,7 +7248,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventmetavalue_id_seq', 1, false);
 -- Name: pretixbase_eventsetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 64, true);
+SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 88, true);
 
 
 --
@@ -7280,7 +7318,7 @@ SELECT pg_catalog.setval('public.pretixbase_invoiceline_id_seq', 1, false);
 -- Name: pretixbase_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 3, true);
+SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 4, true);
 
 
 --
@@ -7315,7 +7353,7 @@ SELECT pg_catalog.setval('public.pretixbase_itembundle_id_seq', 1, false);
 -- Name: pretixbase_itemcategory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_itemcategory_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_itemcategory_id_seq', 1, true);
 
 
 --
@@ -7364,7 +7402,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 29, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 36, true);
 
 
 --
@@ -7490,14 +7528,14 @@ SELECT pg_catalog.setval('public.pretixbase_questionoption_id_seq', 1, false);
 -- Name: pretixbase_quota_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 4, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 5, true);
 
 
 --
 -- Name: pretixbase_quota_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 4, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 5, true);
 
 
 --
@@ -7763,7 +7801,7 @@ SELECT pg_catalog.setval('public.stripe_registeredapplepaydomain_id_seq', 1, fal
 -- Name: ticketoutputpdf_ticketlayout_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.ticketoutputpdf_ticketlayout_id_seq', 1, false);
+SELECT pg_catalog.setval('public.ticketoutputpdf_ticketlayout_id_seq', 1, true);
 
 
 --
