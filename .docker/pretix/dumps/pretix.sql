@@ -16,22 +16,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: pretix
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO pretix;
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pretix
---
-
-COMMENT ON SCHEMA public IS '';
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -2822,7 +2806,8 @@ CREATE TABLE public.pretixbase_order (
     checkin_text text,
     organizer_id bigint,
     internal_secret character varying(32),
-    sales_channel_id bigint NOT NULL
+    sales_channel_id bigint NOT NULL,
+    api_meta jsonb NOT NULL
 );
 
 
@@ -4937,118 +4922,118 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 334	Can change user known login source	84	change_userknownloginsource
 335	Can delete user known login source	84	delete_userknownloginsource
 336	Can view user known login source	84	view_userknownloginsource
-337	Can add Known domain	85	add_knowndomain
-338	Can change Known domain	85	change_knowndomain
-339	Can delete Known domain	85	delete_knowndomain
-340	Can view Known domain	85	view_knowndomain
-341	Can add o auth access token	86	add_oauthaccesstoken
-342	Can change o auth access token	86	change_oauthaccesstoken
-343	Can delete o auth access token	86	delete_oauthaccesstoken
-344	Can view o auth access token	86	view_oauthaccesstoken
-345	Can add o auth application	87	add_oauthapplication
-346	Can change o auth application	87	change_oauthapplication
-347	Can delete o auth application	87	delete_oauthapplication
-348	Can view o auth application	87	view_oauthapplication
-349	Can add o auth grant	88	add_oauthgrant
-350	Can change o auth grant	88	change_oauthgrant
-351	Can delete o auth grant	88	delete_oauthgrant
-352	Can view o auth grant	88	view_oauthgrant
-353	Can add o auth refresh token	89	add_oauthrefreshtoken
-354	Can change o auth refresh token	89	change_oauthrefreshtoken
-355	Can delete o auth refresh token	89	delete_oauthrefreshtoken
-356	Can view o auth refresh token	89	view_oauthrefreshtoken
-357	Can add web hook	90	add_webhook
-358	Can change web hook	90	change_webhook
-359	Can delete web hook	90	delete_webhook
-360	Can view web hook	90	view_webhook
-361	Can add web hook call	91	add_webhookcall
-362	Can change web hook call	91	change_webhookcall
-363	Can delete web hook call	91	delete_webhookcall
-364	Can view web hook call	91	view_webhookcall
-365	Can add web hook event listener	92	add_webhookeventlistener
-366	Can change web hook event listener	92	change_webhookeventlistener
-367	Can delete web hook event listener	92	delete_webhookeventlistener
-368	Can view web hook event listener	92	view_webhookeventlistener
-369	Can add api call	93	add_apicall
-370	Can change api call	93	change_apicall
-371	Can delete api call	93	delete_apicall
-372	Can view api call	93	view_apicall
-373	Can add web hook call retry	94	add_webhookcallretry
-374	Can change web hook call retry	94	change_webhookcallretry
-375	Can delete web hook call retry	94	delete_webhookcallretry
-376	Can view web hook call retry	94	view_webhookcallretry
-377	Can add o auth id token	95	add_oauthidtoken
-378	Can change o auth id token	95	change_oauthidtoken
-379	Can delete o auth id token	95	delete_oauthidtoken
-380	Can view o auth id token	95	view_oauthidtoken
-381	Can add thumbnail	96	add_thumbnail
-382	Can change thumbnail	96	change_thumbnail
-383	Can delete thumbnail	96	delete_thumbnail
-384	Can view thumbnail	96	view_thumbnail
-385	Can add bank import job	97	add_bankimportjob
-386	Can change bank import job	97	change_bankimportjob
-387	Can delete bank import job	97	delete_bankimportjob
-388	Can view bank import job	97	view_bankimportjob
-389	Can add bank transaction	98	add_banktransaction
-390	Can change bank transaction	98	change_banktransaction
-391	Can delete bank transaction	98	delete_banktransaction
-392	Can view bank transaction	98	view_banktransaction
-393	Can add refund export	99	add_refundexport
-394	Can change refund export	99	change_refundexport
-395	Can delete refund export	99	delete_refundexport
-396	Can view refund export	99	view_refundexport
-397	Can add referenced stripe object	100	add_referencedstripeobject
-398	Can change referenced stripe object	100	change_referencedstripeobject
-399	Can delete referenced stripe object	100	delete_referencedstripeobject
-400	Can view referenced stripe object	100	view_referencedstripeobject
-401	Can add registered apple pay domain	101	add_registeredapplepaydomain
-402	Can change registered apple pay domain	101	change_registeredapplepaydomain
-403	Can delete registered apple pay domain	101	delete_registeredapplepaydomain
-404	Can view registered apple pay domain	101	view_registeredapplepaydomain
-405	Can add referenced pay pal object	102	add_referencedpaypalobject
-406	Can change referenced pay pal object	102	change_referencedpaypalobject
-407	Can delete referenced pay pal object	102	delete_referencedpaypalobject
-408	Can view referenced pay pal object	102	view_referencedpaypalobject
-409	Can add ticket layout	103	add_ticketlayout
-410	Can change ticket layout	103	change_ticketlayout
-411	Can delete ticket layout	103	delete_ticketlayout
-412	Can view ticket layout	103	view_ticketlayout
-413	Can add ticket layout item	104	add_ticketlayoutitem
-414	Can change ticket layout item	104	change_ticketlayoutitem
-415	Can delete ticket layout item	104	delete_ticketlayoutitem
-416	Can view ticket layout item	104	view_ticketlayoutitem
-417	Can add rule	105	add_rule
-418	Can change rule	105	change_rule
-419	Can delete rule	105	delete_rule
-420	Can view rule	105	view_rule
-421	Can add scheduled mail	106	add_scheduledmail
-422	Can change scheduled mail	106	change_scheduledmail
-423	Can delete scheduled mail	106	delete_scheduledmail
-424	Can view scheduled mail	106	view_scheduledmail
-425	Can add badge item	107	add_badgeitem
-426	Can change badge item	107	change_badgeitem
-427	Can delete badge item	107	delete_badgeitem
-428	Can view badge item	107	view_badgeitem
-429	Can add badge layout	108	add_badgelayout
-430	Can change badge layout	108	change_badgelayout
-431	Can delete badge layout	108	delete_badgelayout
-432	Can view badge layout	108	view_badgelayout
-433	Can add TOTP device	109	add_totpdevice
-434	Can change TOTP device	109	change_totpdevice
-435	Can delete TOTP device	109	delete_totpdevice
-436	Can view TOTP device	109	view_totpdevice
-437	Can add static device	110	add_staticdevice
-438	Can change static device	110	change_staticdevice
-439	Can delete static device	110	delete_staticdevice
-440	Can view static device	110	view_staticdevice
-441	Can add static token	111	add_statictoken
-442	Can change static token	111	change_statictoken
-443	Can delete static token	111	delete_statictoken
-444	Can view static token	111	view_statictoken
-445	Can add sales channel	112	add_saleschannel
-446	Can change sales channel	112	change_saleschannel
-447	Can delete sales channel	112	delete_saleschannel
-448	Can view sales channel	112	view_saleschannel
+337	Can add sales channel	85	add_saleschannel
+338	Can change sales channel	85	change_saleschannel
+339	Can delete sales channel	85	delete_saleschannel
+340	Can view sales channel	85	view_saleschannel
+341	Can add Known domain	86	add_knowndomain
+342	Can change Known domain	86	change_knowndomain
+343	Can delete Known domain	86	delete_knowndomain
+344	Can view Known domain	86	view_knowndomain
+345	Can add o auth access token	87	add_oauthaccesstoken
+346	Can change o auth access token	87	change_oauthaccesstoken
+347	Can delete o auth access token	87	delete_oauthaccesstoken
+348	Can view o auth access token	87	view_oauthaccesstoken
+349	Can add o auth application	88	add_oauthapplication
+350	Can change o auth application	88	change_oauthapplication
+351	Can delete o auth application	88	delete_oauthapplication
+352	Can view o auth application	88	view_oauthapplication
+353	Can add o auth grant	89	add_oauthgrant
+354	Can change o auth grant	89	change_oauthgrant
+355	Can delete o auth grant	89	delete_oauthgrant
+356	Can view o auth grant	89	view_oauthgrant
+357	Can add o auth refresh token	90	add_oauthrefreshtoken
+358	Can change o auth refresh token	90	change_oauthrefreshtoken
+359	Can delete o auth refresh token	90	delete_oauthrefreshtoken
+360	Can view o auth refresh token	90	view_oauthrefreshtoken
+361	Can add web hook	91	add_webhook
+362	Can change web hook	91	change_webhook
+363	Can delete web hook	91	delete_webhook
+364	Can view web hook	91	view_webhook
+365	Can add web hook call	92	add_webhookcall
+366	Can change web hook call	92	change_webhookcall
+367	Can delete web hook call	92	delete_webhookcall
+368	Can view web hook call	92	view_webhookcall
+369	Can add web hook event listener	93	add_webhookeventlistener
+370	Can change web hook event listener	93	change_webhookeventlistener
+371	Can delete web hook event listener	93	delete_webhookeventlistener
+372	Can view web hook event listener	93	view_webhookeventlistener
+373	Can add api call	94	add_apicall
+374	Can change api call	94	change_apicall
+375	Can delete api call	94	delete_apicall
+376	Can view api call	94	view_apicall
+377	Can add web hook call retry	95	add_webhookcallretry
+378	Can change web hook call retry	95	change_webhookcallretry
+379	Can delete web hook call retry	95	delete_webhookcallretry
+380	Can view web hook call retry	95	view_webhookcallretry
+381	Can add o auth id token	96	add_oauthidtoken
+382	Can change o auth id token	96	change_oauthidtoken
+383	Can delete o auth id token	96	delete_oauthidtoken
+384	Can view o auth id token	96	view_oauthidtoken
+385	Can add thumbnail	97	add_thumbnail
+386	Can change thumbnail	97	change_thumbnail
+387	Can delete thumbnail	97	delete_thumbnail
+388	Can view thumbnail	97	view_thumbnail
+389	Can add bank import job	98	add_bankimportjob
+390	Can change bank import job	98	change_bankimportjob
+391	Can delete bank import job	98	delete_bankimportjob
+392	Can view bank import job	98	view_bankimportjob
+393	Can add bank transaction	99	add_banktransaction
+394	Can change bank transaction	99	change_banktransaction
+395	Can delete bank transaction	99	delete_banktransaction
+396	Can view bank transaction	99	view_banktransaction
+397	Can add refund export	100	add_refundexport
+398	Can change refund export	100	change_refundexport
+399	Can delete refund export	100	delete_refundexport
+400	Can view refund export	100	view_refundexport
+401	Can add referenced stripe object	101	add_referencedstripeobject
+402	Can change referenced stripe object	101	change_referencedstripeobject
+403	Can delete referenced stripe object	101	delete_referencedstripeobject
+404	Can view referenced stripe object	101	view_referencedstripeobject
+405	Can add registered apple pay domain	102	add_registeredapplepaydomain
+406	Can change registered apple pay domain	102	change_registeredapplepaydomain
+407	Can delete registered apple pay domain	102	delete_registeredapplepaydomain
+408	Can view registered apple pay domain	102	view_registeredapplepaydomain
+409	Can add referenced pay pal object	103	add_referencedpaypalobject
+410	Can change referenced pay pal object	103	change_referencedpaypalobject
+411	Can delete referenced pay pal object	103	delete_referencedpaypalobject
+412	Can view referenced pay pal object	103	view_referencedpaypalobject
+413	Can add ticket layout	104	add_ticketlayout
+414	Can change ticket layout	104	change_ticketlayout
+415	Can delete ticket layout	104	delete_ticketlayout
+416	Can view ticket layout	104	view_ticketlayout
+417	Can add ticket layout item	105	add_ticketlayoutitem
+418	Can change ticket layout item	105	change_ticketlayoutitem
+419	Can delete ticket layout item	105	delete_ticketlayoutitem
+420	Can view ticket layout item	105	view_ticketlayoutitem
+421	Can add rule	106	add_rule
+422	Can change rule	106	change_rule
+423	Can delete rule	106	delete_rule
+424	Can view rule	106	view_rule
+425	Can add scheduled mail	107	add_scheduledmail
+426	Can change scheduled mail	107	change_scheduledmail
+427	Can delete scheduled mail	107	delete_scheduledmail
+428	Can view scheduled mail	107	view_scheduledmail
+429	Can add badge item	108	add_badgeitem
+430	Can change badge item	108	change_badgeitem
+431	Can delete badge item	108	delete_badgeitem
+432	Can view badge item	108	view_badgeitem
+433	Can add badge layout	109	add_badgelayout
+434	Can change badge layout	109	change_badgelayout
+435	Can delete badge layout	109	delete_badgelayout
+436	Can view badge layout	109	view_badgelayout
+437	Can add TOTP device	110	add_totpdevice
+438	Can change TOTP device	110	change_totpdevice
+439	Can delete TOTP device	110	delete_totpdevice
+440	Can view TOTP device	110	view_totpdevice
+441	Can add static device	111	add_staticdevice
+442	Can change static device	111	change_staticdevice
+443	Can delete static device	111	delete_staticdevice
+444	Can view static device	111	view_staticdevice
+445	Can add static token	112	add_statictoken
+446	Can change static token	112	change_statictoken
+447	Can delete static token	112	delete_statictoken
+448	Can view static token	112	view_statictoken
 \.
 
 
@@ -5181,34 +5166,34 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 82	pretixbase	reusablemedium
 83	pretixbase	mediumkeyset
 84	pretixbase	userknownloginsource
-85	pretixmultidomain	knowndomain
-86	pretixapi	oauthaccesstoken
-87	pretixapi	oauthapplication
-88	pretixapi	oauthgrant
-89	pretixapi	oauthrefreshtoken
-90	pretixapi	webhook
-91	pretixapi	webhookcall
-92	pretixapi	webhookeventlistener
-93	pretixapi	apicall
-94	pretixapi	webhookcallretry
-95	pretixapi	oauthidtoken
-96	pretixhelpers	thumbnail
-97	banktransfer	bankimportjob
-98	banktransfer	banktransaction
-99	banktransfer	refundexport
-100	stripe	referencedstripeobject
-101	stripe	registeredapplepaydomain
-102	paypal	referencedpaypalobject
-103	ticketoutputpdf	ticketlayout
-104	ticketoutputpdf	ticketlayoutitem
-105	sendmail	rule
-106	sendmail	scheduledmail
-107	badges	badgeitem
-108	badges	badgelayout
-109	otp_totp	totpdevice
-110	otp_static	staticdevice
-111	otp_static	statictoken
-112	pretixbase	saleschannel
+85	pretixbase	saleschannel
+86	pretixmultidomain	knowndomain
+87	pretixapi	oauthaccesstoken
+88	pretixapi	oauthapplication
+89	pretixapi	oauthgrant
+90	pretixapi	oauthrefreshtoken
+91	pretixapi	webhook
+92	pretixapi	webhookcall
+93	pretixapi	webhookeventlistener
+94	pretixapi	apicall
+95	pretixapi	webhookcallretry
+96	pretixapi	oauthidtoken
+97	pretixhelpers	thumbnail
+98	banktransfer	bankimportjob
+99	banktransfer	banktransaction
+100	banktransfer	refundexport
+101	stripe	referencedstripeobject
+102	stripe	registeredapplepaydomain
+103	paypal	referencedpaypalobject
+104	ticketoutputpdf	ticketlayout
+105	ticketoutputpdf	ticketlayoutitem
+106	sendmail	rule
+107	sendmail	scheduledmail
+108	badges	badgeitem
+109	badges	badgelayout
+110	otp_totp	totpdevice
+111	otp_static	staticdevice
+112	otp_static	statictoken
 \.
 
 
@@ -5217,408 +5202,409 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2024-06-03 21:58:20.754111+00
-2	contenttypes	0002_remove_content_type_name	2024-06-03 21:58:20.762067+00
-3	auth	0001_initial	2024-06-03 21:58:20.802452+00
-4	auth	0002_alter_permission_name_max_length	2024-06-03 21:58:20.808734+00
-5	auth	0003_alter_user_email_max_length	2024-06-03 21:58:20.815628+00
-6	auth	0004_alter_user_username_opts	2024-06-03 21:58:20.823027+00
-7	auth	0005_alter_user_last_login_null	2024-06-03 21:58:20.829874+00
-8	auth	0006_require_contenttypes_0002	2024-06-03 21:58:20.832736+00
-9	auth	0007_alter_validators_add_error_messages	2024-06-03 21:58:20.840742+00
-10	auth	0008_alter_user_username_max_length	2024-06-03 21:58:20.847667+00
-11	auth	0009_alter_user_last_name_max_length	2024-06-03 21:58:20.85404+00
-12	auth	0010_alter_group_name_max_length	2024-06-03 21:58:20.861965+00
-13	auth	0011_update_proxy_permissions	2024-06-03 21:58:20.86865+00
-14	auth	0012_alter_user_first_name_max_length	2024-06-03 21:58:20.875111+00
-15	pretixbase	0001_initial	2024-06-03 21:58:22.906599+00
-16	pretixbase	0002_auto_20160209_0940	2024-06-03 21:58:22.909511+00
-17	pretixbase	0003_eventpermission_can_change_vouchers	2024-06-03 21:58:22.912062+00
-18	pretixbase	0004_auto_20160209_1023	2024-06-03 21:58:22.914544+00
-19	pretixbase	0005_auto_20160211_1459	2024-06-03 21:58:22.916978+00
-20	pretixbase	0006_auto_20160211_1630	2024-06-03 21:58:22.919447+00
-21	pretixbase	0007_auto_20160211_1710	2024-06-03 21:58:22.921902+00
-22	pretixbase	0008_invoiceaddress	2024-06-03 21:58:22.924429+00
-23	pretixbase	0009_auto_20160222_2002	2024-06-03 21:58:22.926846+00
-24	pretixbase	0010_orderposition_secret	2024-06-03 21:58:22.9294+00
-25	pretixbase	0011_auto_20160311_2052	2024-06-03 21:58:22.931825+00
-26	pretixbase	0012_auto_20160312_1040	2024-06-03 21:58:22.934454+00
-27	pretixbase	0013_invoice_locale	2024-06-03 21:58:22.936911+00
-28	pretixbase	0014_invoice_additional_text	2024-06-03 21:58:22.939406+00
-29	pretixbase	0015_auto_20160312_1924	2024-06-03 21:58:22.941834+00
-30	pretixbase	0016_voucher_variation	2024-06-03 21:58:22.944366+00
-31	pretixbase	0017_auto_20160324_1615	2024-06-03 21:58:22.946957+00
-32	pretixbase	0018_auto_20160326_1104	2024-06-03 21:58:22.949466+00
-33	pretixbase	0019_auto_20160326_1139	2024-06-03 21:58:22.951957+00
-34	pretixbase	0020_auto_20160418_2106	2024-06-03 21:58:22.954421+00
-35	pretixbase	0021_auto_20160418_2117	2024-06-03 21:58:22.956949+00
-36	pretixbase	0020_auto_20160421_1943	2024-06-03 21:58:22.95939+00
-37	pretixbase	0022_merge	2024-06-03 21:58:22.961914+00
-38	pretixbase	0023_auto_20160601_1039	2024-06-03 21:58:22.964327+00
-39	pretixbase	0024_auto_20160728_1725	2024-06-03 21:58:22.966689+00
-40	pretixbase	0025_auto_20160802_2202	2024-06-03 21:58:22.969366+00
-41	pretixbase	0026_order_comment	2024-06-03 21:58:22.971835+00
-42	pretixbase	0027_auto_20160815_1254	2024-06-03 21:58:22.974306+00
-43	pretixbase	0028_auto_20160816_1242	2024-06-03 21:58:22.976695+00
-44	pretixbase	0028_invoice_invoice_no_charfield	2024-06-03 21:58:23.006655+00
-45	pretixbase	0029_invoice_no_data	2024-06-03 21:58:23.039615+00
-46	pretixbase	0030_auto_20160816_0646	2024-06-03 21:58:23.107111+00
-47	pretixbase	0031_auto_20160816_0648	2024-06-03 21:58:23.88789+00
-48	pretixbase	0032_question_position	2024-06-03 21:58:23.890969+00
-49	pretixbase	0033_auto_20160821_2222	2024-06-03 21:58:23.893958+00
-50	pretixbase	0034_auto_20160830_1952	2024-06-03 21:58:23.896696+00
-51	pretixbase	0032_item_allow_cancel	2024-06-03 21:58:23.899458+00
-52	pretixbase	0033_auto_20160822_1044	2024-06-03 21:58:23.902155+00
-53	pretixbase	0035_merge	2024-06-03 21:58:23.904637+00
-54	pretixbase	0036_auto_20160902_0755	2024-06-03 21:58:23.907324+00
-55	pretixbase	0037_invoice_payment_provider_text	2024-06-03 21:58:23.910076+00
-56	pretixbase	0038_auto_20160924_1448	2024-06-03 21:58:23.912652+00
-57	pretixbase	0039_user_require_2fa	2024-06-03 21:58:23.915438+00
-58	pretixbase	0040_u2fdevice	2024-06-03 21:58:23.918028+00
-59	pretixbase	0041_auto_20161018_1654	2024-06-03 21:58:23.920432+00
-60	pretixbase	0042_order_expires	2024-06-03 21:58:23.923077+00
-61	pretixbase	0043_globalsetting	2024-06-03 21:58:23.925627+00
-62	pretixbase	0044_auto_20161101_1610	2024-06-03 21:58:23.928129+00
-63	pretixbase	0045_auto_20161108_1542	2024-06-03 21:58:23.930714+00
-64	pretixbase	0046_order_meta_info	2024-06-03 21:58:23.933435+00
-65	pretixbase	0047_auto_20161126_1300	2024-06-03 21:58:23.936065+00
-66	pretixbase	0048_auto_20161129_1330	2024-06-03 21:58:23.938595+00
-67	pretixdroid	0001_initial	2024-06-03 21:58:23.980526+00
-68	pretixdroid	0002_auto_20161208_1644	2024-06-03 21:58:23.994252+00
-69	pretixbase	0049_checkin	2024-06-03 21:58:24.028037+00
-70	pretixbase	0050_orderposition_positionid	2024-06-03 21:58:24.921681+00
-71	pretixbase	0051_auto_20161221_1720	2024-06-03 21:58:24.924454+00
-72	pretixbase	0052_auto_20161231_1533	2024-06-03 21:58:24.927084+00
-73	pretixbase	0053_auto_20170104_1252	2024-06-03 21:58:24.929589+00
-74	pretixbase	0054_auto_20170107_1058	2024-06-03 21:58:24.932115+00
-75	pretixbase	0055_organizerpermission_can_change_permissions	2024-06-03 21:58:24.934595+00
-76	pretixbase	0056_auto_20170107_1251	2024-06-03 21:58:24.937043+00
-77	pretixbase	0057_auto_20170107_1531	2024-06-03 21:58:24.939571+00
-78	pretixbase	0058_auto_20170107_1533	2024-06-03 21:58:24.941999+00
-79	pretixbase	0059_cachedcombinedticket	2024-06-03 21:58:24.944548+00
-80	pretixbase	0060_auto_20170113_1438	2024-06-03 21:58:24.947079+00
-81	pretixbase	0061_event_location	2024-06-03 21:58:24.949568+00
-82	pretixbase	0051_auto_20170206_2027	2024-06-03 21:58:25.943659+00
-83	pretixbase	0052_auto_20170324_1506	2024-06-03 21:58:25.946353+00
-84	pretixbase	0053_auto_20170409_1651	2024-06-03 21:58:25.948843+00
-85	pretixbase	0054_auto_20170413_1050	2024-06-03 21:58:25.9515+00
-86	pretixbase	0055_auto_20170413_1537	2024-06-03 21:58:25.954165+00
-87	pretixbase	0056_auto_20170414_1044	2024-06-03 21:58:25.956733+00
-88	pretixbase	0057_auto_20170501_2116	2024-06-03 21:58:25.959268+00
-89	pretixbase	0052_team_teaminvite	2024-06-03 21:58:28.538695+00
-90	pretixbase	0058_auto_20170429_1020	2024-06-03 21:58:28.541707+00
-91	pretixbase	0059_checkin_nonce	2024-06-03 21:58:28.544516+00
-92	pretixbase	0060_auto_20170510_1027	2024-06-03 21:58:28.547062+00
-93	pretixbase	0061_auto_20170521_0942	2024-06-03 21:58:28.549733+00
-94	pretixbase	0062_auto_20170602_0948	2024-06-03 21:58:28.552419+00
-95	pretixbase	0063_auto_20170702_1711	2024-06-03 21:58:28.555541+00
-96	pretixbase	0064_auto_20170703_0912	2024-06-03 21:58:28.561427+00
-97	pretixbase	0065_auto_20170707_0920	2024-06-03 21:58:28.565281+00
-98	pretixbase	0066_auto_20170708_2102	2024-06-03 21:58:28.568571+00
-99	pretixbase	0067_auto_20170712_1610	2024-06-03 21:58:28.571936+00
-100	pretixbase	0068_subevent_frontpage_text	2024-06-03 21:58:28.57564+00
-101	pretixbase	0069_invoice_prefix	2024-06-03 21:58:28.579279+00
-102	pretixbase	0070_auto_20170719_0910	2024-06-03 21:58:28.582919+00
-103	pretixbase	0071_auto_20170729_1616	2024-06-03 21:58:30.213052+00
-104	pretixbase	0072_order_download_reminder_sent	2024-06-03 21:58:30.217067+00
-105	pretixbase	0073_auto_20170716_1333	2024-06-03 21:58:30.221628+00
-106	pretixbase	0074_auto_20170825_1258	2024-06-03 21:58:30.226209+00
-107	pretixbase	0075_auto_20170828_0901	2024-06-03 21:58:30.230862+00
-108	pretixbase	0076_orderfee	2024-06-03 21:58:31.293436+00
-109	pretixbase	0077_auto_20170829_1126	2024-06-03 21:58:31.297206+00
-110	pretixbase	0078_auto_20171003_1650	2024-06-03 21:58:31.300364+00
-111	pretixbase	0079_auto_20171010_2117	2024-06-03 21:58:31.303453+00
-112	pretixbase	0080_auto_20171016_1553	2024-06-03 21:58:31.306305+00
-113	pretixbase	0081_quota_cached_availability_paid_orders	2024-06-03 21:58:31.309499+00
-114	pretixbase	0082_invoiceaddress_internal_reference	2024-06-03 21:58:31.312407+00
-115	pretixbase	0077_auto_20171124_1629	2024-06-03 21:58:33.815607+00
-116	pretixbase	0078_auto_20171206_1603	2024-06-03 21:58:33.818602+00
-117	pretixbase	0079_auto_20180115_0855	2024-06-03 21:58:33.821407+00
-118	pretixbase	0080_question_ask_during_checkin	2024-06-03 21:58:33.824172+00
-119	pretixbase	0081_auto_20180220_1031	2024-06-03 21:58:33.826974+00
-120	pretixbase	0082_auto_20180222_0938	2024-06-03 21:58:33.829731+00
-121	pretixbase	0083_auto_20180228_2102	2024-06-03 21:58:33.832559+00
-122	pretixbase	0084_questionoption_position	2024-06-03 21:58:33.835391+00
-123	pretixbase	0085_auto_20180312_1119	2024-06-03 21:58:33.838429+00
-124	pretixbase	0086_auto_20180320_1219	2024-06-03 21:58:33.841363+00
-125	pretixbase	0087_auto_20180317_1952	2024-06-03 21:58:33.844032+00
-126	pretixbase	0088_auto_20180328_1217	2024-06-03 21:58:33.846922+00
-127	badges	0001_initial	2024-06-03 21:58:34.060693+00
-128	badges	0002_auto_20190201_1424	2024-06-03 21:58:34.23416+00
-129	badges	0003_bigint	2024-06-03 21:58:34.363764+00
-130	pretixapi	0001_initial	2024-06-03 21:58:34.863787+00
-131	pretixbase	0089_auto_20180315_1322	2024-06-03 21:58:34.963337+00
-132	pretixbase	0090_auto_20180509_0917	2024-06-03 21:58:35.382082+00
-133	pretixbase	0091_auto_20180513_1641	2024-06-03 21:58:35.385243+00
-134	pretixbase	0092_auto_20180511_1224	2024-06-03 21:58:35.388949+00
-135	pretixbase	0093_auto_20180528_1432	2024-06-03 21:58:35.392717+00
-136	pretixbase	0094_auto_20180604_1119	2024-06-03 21:58:35.39605+00
-137	pretixbase	0095_auto_20180604_1129	2024-06-03 21:58:35.399154+00
-138	pretixbase	0096_auto_20180722_0801	2024-06-03 21:58:36.084404+00
-139	pretixbase	0097_auto_20180722_0804	2024-06-03 21:58:36.477461+00
-140	pretixbase	0098_auto_20180731_1243	2024-06-03 21:58:37.188154+00
-141	pretixbase	0099_auto_20180807_0841	2024-06-03 21:58:37.190885+00
-142	pretixbase	0100_item_require_approval	2024-06-03 21:58:37.193553+00
-143	pretixbase	0099_auto_20180912_1035	2024-06-03 21:58:37.428598+00
-144	pretixbase	0100_auto_20181023_2300	2024-06-03 21:58:38.505218+00
-145	pretixbase	0101_auto_20181025_2255	2024-06-03 21:58:38.583475+00
-146	pretixbase	0102_auto_20181017_0024	2024-06-03 21:58:39.033822+00
-147	pretixbase	0103_auto_20181121_1224	2024-06-03 21:58:39.165284+00
-148	pretixbase	0104_auto_20181114_1526	2024-06-03 21:58:39.729273+00
-149	pretixbase	0105_auto_20190112_1512	2024-06-03 21:58:40.051671+00
-150	pretixbase	0106_auto_20190118_1527	2024-06-03 21:58:40.054606+00
-151	pretixbase	0107_auto_20190129_1337	2024-06-03 21:58:40.057387+00
-152	pretixbase	0108_auto_20190201_1527	2024-06-03 21:58:46.922323+00
-153	pretixbase	0109_auto_20190208_1432	2024-06-03 21:58:46.925653+00
-154	pretixbase	0110_auto_20190219_1245	2024-06-03 21:58:46.928954+00
-155	pretixbase	0111_auto_20190219_0949	2024-06-03 21:58:46.93224+00
-156	pretixbase	0112_auto_20190304_1726	2024-06-03 21:58:46.935592+00
-157	pretixbase	0113_auto_20190312_0942	2024-06-03 21:58:46.938669+00
-158	pretixbase	0114_auto_20190316_1014	2024-06-03 21:58:46.94163+00
-159	pretixbase	0115_auto_20190323_2238	2024-06-03 21:58:46.944673+00
-160	pretixbase	0116_auto_20190402_0722	2024-06-03 21:58:46.947853+00
-161	pretixbase	0117_auto_20190418_1149	2024-06-03 21:58:46.950958+00
-162	pretixbase	0118_auto_20190423_0839	2024-06-03 21:58:46.953962+00
-163	pretixbase	0119_auto_20190509_0654	2024-06-03 21:58:46.957012+00
-164	pretixbase	0120_auto_20190509_0736	2024-06-03 21:58:46.960102+00
-165	pretixbase	0121_order_email_known_to_work	2024-06-03 21:58:46.963118+00
-166	pretixbase	0122_orderposition_web_secret	2024-06-03 21:58:46.965999+00
-167	pretixbase	0123_auto_20190530_1035	2024-06-03 21:58:46.968971+00
-168	pretixbase	0124_seat_seat_guid	2024-06-03 21:58:46.971906+00
-169	pretixbase	0125_voucher_show_hidden_items	2024-06-03 21:58:46.975+00
-170	pretixbase	0126_item_show_quota_left	2024-06-03 21:58:46.977937+00
-171	pretixbase	0127_auto_20190711_0705	2024-06-03 21:58:46.981167+00
-172	pretixbase	0128_auto_20190715_1510	2024-06-03 21:58:46.984257+00
-173	pretixbase	0129_auto_20190724_1548	2024-06-03 21:58:46.98719+00
-174	pretixbase	0130_auto_20190729_1311	2024-06-03 21:58:46.990114+00
-175	pretixbase	0131_auto_20190729_1422	2024-06-03 21:58:46.993084+00
-176	pretixbase	0132_auto_20190808_1253	2024-06-03 21:58:46.995988+00
-177	pretixbase	0133_auto_20190830_1513	2024-06-03 21:58:46.998899+00
-178	pretixbase	0134_auto_20190909_1042	2024-06-03 21:58:47.001786+00
-179	pretixbase	0135_auto_20191007_0803	2024-06-03 21:58:47.005185+00
-180	pretixbase	0136_auto_20190918_1742	2024-06-03 21:58:47.008249+00
-181	pretixbase	0137_auto_20191015_1141	2024-06-03 21:58:47.011493+00
-182	pretixbase	0138_auto_20191017_1151	2024-06-03 21:58:47.014645+00
-183	pretixbase	0139_auto_20191019_1317	2024-06-03 21:58:47.017698+00
-184	pretixbase	0140_voucher_seat	2024-06-03 21:58:47.020832+00
-185	pretixbase	0141_seat_sorting_rank	2024-06-03 21:58:47.023726+00
-186	pretixbase	0142_auto_20191215_1522	2024-06-03 21:58:47.245592+00
-187	pretixbase	0143_auto_20200217_1211	2024-06-03 21:58:47.43418+00
-188	pretixbase	0144_invoiceaddress_custom_field	2024-06-03 21:58:47.556723+00
-189	pretixbase	0145_auto_20200210_1038	2024-06-03 21:58:47.790451+00
-190	pretixbase	0146_giftcardtransaction_text	2024-06-03 21:58:47.837011+00
-191	pretixbase	0147_user_session_token	2024-06-03 21:58:47.861232+00
-192	pretixbase	0148_cancellationrequest	2024-06-03 21:58:48.248766+00
-193	pretixbase	0149_order_cancellation_date	2024-06-03 21:58:48.433828+00
-194	pretixbase	0150_auto_20200401_1123	2024-06-03 21:58:49.410624+00
-195	pretixbase	0151_auto_20200421_0737	2024-06-03 21:58:49.544049+00
-196	pretixbase	0152_auto_20200511_1504	2024-06-03 21:58:50.052856+00
-197	pretixbase	0153_auto_20200528_1953	2024-06-03 21:58:50.308487+00
-198	pretixbase	0154_auto_20200620_1633	2024-06-03 21:58:50.474316+00
-199	pretixbase	0155_quota_release_after_exit	2024-06-03 21:58:50.565626+00
-200	pretixbase	0156_cartposition_override_tax_rate	2024-06-03 21:58:50.660227+00
-201	pretixbase	0157_auto_20200712_0932	2024-06-03 21:58:50.981159+00
-202	pretixbase	0158_auto_20200724_0754	2024-06-03 21:58:51.352985+00
-203	pretixbase	0159_mails_by_sales_channel	2024-06-03 21:58:51.429661+00
-204	pretixbase	0160_multiple_confirm_texts	2024-06-03 21:58:51.508109+00
-205	pretixbase	0161_order_changes_retain_old_default	2024-06-03 21:58:51.585305+00
-206	pretixbase	0162_remove_seat_name	2024-06-03 21:58:51.635331+00
-207	banktransfer	0001_initial	2024-06-03 21:58:51.860293+00
-208	banktransfer	0002_auto_20160908_2020	2024-06-03 21:58:52.03093+00
-209	banktransfer	0003_banktransaction_comment	2024-06-03 21:58:52.081945+00
-210	banktransfer	0004_auto_20170619_1125	2024-06-03 21:58:52.448854+00
-211	banktransfer	0005_auto_20181023_2209	2024-06-03 21:58:52.52931+00
-212	banktransfer	0006_auto_20200901_1419	2024-06-03 21:58:52.984304+00
-213	banktransfer	0007_refundexport	2024-06-03 21:58:53.074292+00
-214	banktransfer	0008_alter_banktransaction_amount	2024-06-03 21:58:53.128314+00
-215	banktransfer	0009_banktransaction_currency	2024-06-03 21:58:53.336183+00
-216	banktransfer	0010_bigint	2024-06-03 21:58:53.567851+00
-217	banktransfer	0011_banktransaction_external_id	2024-06-03 21:58:53.624986+00
-218	pretixbase	0163_device_security_profile	2024-06-03 21:58:53.672227+00
-219	pretixbase	0164_subevent_last_modified	2024-06-03 21:58:53.728337+00
-220	pretixbase	0165_auto_20201015_1924	2024-06-03 21:58:53.869989+00
-221	pretixbase	0166_auto_20201015_2029	2024-06-03 21:58:53.923799+00
-222	pretixbase	0167_checkinlist_exit_all_at	2024-06-03 21:58:53.980067+00
-223	pretixbase	0168_auto_20201023_1447	2024-06-03 21:58:54.229911+00
-224	pretixbase	0169_checkinlist_gates	2024-06-03 21:58:54.569313+00
-225	pretixbase	0170_remove_hidden_urls	2024-06-03 21:58:54.649172+00
-226	pretixbase	0171_auto_20201126_1635	2024-06-03 21:58:55.015593+00
-227	pretixbase	0172_event_sales_channels	2024-06-03 21:58:55.063396+00
-228	pretixbase	0173_auto_20201211_1648	2024-06-03 21:58:55.275191+00
-229	pretixbase	0162b_auto_20201218_1810	2024-06-03 21:58:55.288425+00
-230	pretixbase	0174_merge_20201222_1031	2024-06-03 21:58:55.292987+00
-231	pretixbase	0175_orderrefund_comment	2024-06-03 21:58:55.315958+00
-232	pretixbase	0176_auto_20210205_1512	2024-06-03 21:58:55.388097+00
-233	pretixbase	0177_auto_20210301_1510	2024-06-03 21:58:55.547673+00
-234	pretixbase	0178_auto_20210308_1326	2024-06-03 21:58:55.77311+00
-235	pretixbase	0179_auto_20210311_1653	2024-06-03 21:58:55.855265+00
-236	pretixbase	0180_auto_20210324_1309	2024-06-03 21:58:56.391248+00
-237	pretixbase	0181_team_can_checkin_orders	2024-06-03 21:58:56.450226+00
-238	pretixbase	0182_question_valid_file_portrait	2024-06-03 21:58:56.512475+00
-239	pretixbase	0183_auto_20210423_0829	2024-06-03 21:58:56.639469+00
-240	pretixbase	0184_customer	2024-06-03 21:58:57.463352+00
-241	pretixbase	0185_memberships	2024-06-03 21:58:58.797087+00
-242	pretixbase	0186_invoice_sent_to_organizer	2024-06-03 21:58:58.864003+00
-243	pretixbase	0187_normalize_salutation	2024-06-03 21:58:59.407238+00
-244	pretixbase	0188_delete_requiredaction	2024-06-03 21:58:59.419567+00
-245	pretixbase	0189_auto_20210525_1311	2024-06-03 21:58:59.538865+00
-246	pretixbase	0190_quota_ignore_for_event_availability	2024-06-03 21:58:59.596275+00
-247	pretixbase	0191_event_last_modified	2024-06-03 21:58:59.651571+00
-248	pretixbase	0192_checkin_more_fields	2024-06-03 21:59:00.192852+00
-249	pretixbase	0193_auto_20210611_1355	2024-06-03 21:59:00.301953+00
-250	pretixbase	0194_membership_canceled	2024-06-03 21:59:00.338378+00
-251	pretixbase	0195_auto_20210622_1457	2024-06-03 21:59:00.434015+00
-252	pretixbase	0196_auto_20210523_1322	2024-06-03 21:59:00.902672+00
-253	pretixbase	0197_auto_20210914_0814	2024-06-03 21:59:01.053927+00
-254	pretixbase	0198_invoice_sent_to_customer	2024-06-03 21:59:01.113918+00
-255	pretixbase	0199_auto_20211005_1050	2024-06-03 21:59:01.210704+00
-256	pretixbase	0200_transaction	2024-06-03 21:59:01.328357+00
-257	pretixbase	0201_invoiceline_event_location	2024-06-03 21:59:01.378304+00
-258	pretixbase	0202_user_needs_password_change	2024-06-03 21:59:01.406867+00
-259	pretixbase	0203_orderposition_is_bundled	2024-06-03 21:59:01.468813+00
-260	pretixbase	0204_orderposition_backfill_is_bundled	2024-06-03 21:59:01.555994+00
-261	pretixbase	0205_itemvariation_require_approval	2024-06-03 21:59:01.60178+00
-262	pretixbase	0206_customer_phone	2024-06-03 21:59:01.630701+00
-263	pretixbase	0207_auto_20220119_1427	2024-06-03 21:59:01.725199+00
-264	pretixbase	0208_auto_20220214_1632	2024-06-03 21:59:01.811599+00
-265	pretixbase	0209_device_info	2024-06-03 21:59:01.867773+00
-266	pretixbase	0210_auto_20220303_2017	2024-06-03 21:59:02.928386+00
-267	pretixbase	0211_auto_20220314_2001	2024-06-03 21:59:03.019303+00
-268	pretixbase	0212_auto_20220318_1408	2024-06-03 21:59:03.26558+00
-269	pretixbase	0213_discount_condition_ignore_voucher_discounted	2024-06-03 21:59:03.325029+00
-270	pretixbase	0214_customer_notes_ext_id	2024-06-03 21:59:03.382303+00
-271	pretixbase	0215_customer_organizer_identifier_unique	2024-06-03 21:59:03.44939+00
-272	pretixbase	0216_checkin_forced_sent	2024-06-03 21:59:03.507319+00
-273	pretixbase	0217_eventfooterlink_organizerfooterlink	2024-06-03 21:59:03.707937+00
-274	pretixbase	0218_checkinlist_addon_match	2024-06-03 21:59:03.770121+00
-275	pretixbase	0219_auto_20220706_0913	2024-06-03 21:59:03.974687+00
-276	pretixbase	0220_auto_20220811_1002	2024-06-03 21:59:04.674349+00
-277	pretixbase	0221_clean_nonunique_question_identifiers	2024-06-03 21:59:04.76982+00
-278	pretixbase	0222_alter_question_unique_together	2024-06-03 21:59:04.834454+00
-279	pretixbase	0223_voucher_min_usages	2024-06-03 21:59:04.900319+00
-280	pretixbase	0224_eventmetaproperty_filter_allowed	2024-06-03 21:59:04.93074+00
-281	pretixbase	0225_orderpayment_process_initiated	2024-06-03 21:59:04.961857+00
-282	pretixbase	0226_itemvariationmetavalue	2024-06-03 21:59:05.081742+00
-283	pretixapi	0002_auto_20180604_1120	2024-06-03 21:59:05.301304+00
-284	pretixapi	0003_webhook_webhookcall_webhookeventlistener	2024-06-03 21:59:06.250746+00
-285	pretixapi	0004_auto_20190405_1048	2024-06-03 21:59:06.294491+00
-286	pretixapi	0005_auto_20191028_1541	2024-06-03 21:59:06.338413+00
-287	pretixapi	0006_alter_webhook_target_url	2024-06-03 21:59:06.403559+00
-288	pretixapi	0007_alter_webhookcall_target_url	2024-06-03 21:59:06.41839+00
-289	pretixapi	0008_webhookcallretry	2024-06-03 21:59:06.543292+00
-290	pretixapi	0009_auto_20221217_1847	2024-06-03 21:59:06.988934+00
-291	oauth2_provider	0001_initial	2024-06-03 21:59:07.727784+00
-292	oauth2_provider	0002_auto_20190406_1805	2024-06-03 21:59:07.778524+00
-293	oauth2_provider	0003_auto_20201211_1314	2024-06-03 21:59:07.808583+00
-294	oauth2_provider	0004_auto_20200902_2022	2024-06-03 21:59:08.11384+00
-295	oauth2_provider	0005_auto_20211222_2352	2024-06-03 21:59:08.638681+00
-296	oauth2_provider	0006_alter_application_client_secret	2024-06-03 21:59:08.776325+00
-297	oauth2_provider	0007_application_post_logout_redirect_uris	2024-06-03 21:59:08.806699+00
-298	otp_static	0001_initial	2024-06-03 21:59:09.318372+00
-299	otp_static	0002_throttling	2024-06-03 21:59:09.372602+00
-300	otp_static	0003_add_timestamps	2024-06-03 21:59:09.434527+00
-301	otp_totp	0001_initial	2024-06-03 21:59:09.553349+00
-302	otp_totp	0002_auto_20190420_0723	2024-06-03 21:59:09.612299+00
-303	otp_totp	0003_add_timestamps	2024-06-03 21:59:09.672472+00
-304	paypal	0001_initial	2024-06-03 21:59:09.796704+00
-305	paypal	0002_referencedpaypalobject_payment	2024-06-03 21:59:09.911697+00
-306	paypal	0003_migrate_to_v2	2024-06-03 21:59:10.025184+00
-307	paypal	0004_bigint	2024-06-03 21:59:10.067262+00
-308	pretixapi	0010_webhook_comment	2024-06-03 21:59:10.135883+00
-309	pretixapi	0011_bigint	2024-06-03 21:59:11.141272+00
-310	pretixapi	0012_oauthapplication_post_logout_redirect_uris	2024-06-03 21:59:11.175173+00
-311	pretixbase	0227_item_personalized	2024-06-03 21:59:11.351906+00
-312	pretixbase	0228_scheduledeventexport_scheduledorganizerexport	2024-06-03 21:59:11.593914+00
-313	pretixbase	0229_invoice_payment_provider_stamp	2024-06-03 21:59:11.670027+00
-314	pretixbase	0230_auto_20230208_0939	2024-06-03 21:59:12.080917+00
-315	pretixbase	0231_auto_20230208_1546	2024-06-03 21:59:12.975801+00
-316	pretixbase	0232_exchangerate	2024-06-03 21:59:13.069347+00
-317	pretixbase	0233_ignore_from_quota_while_blocked	2024-06-03 21:59:13.139393+00
-318	pretixbase	0234_total_ordering	2024-06-03 21:59:13.728329+00
-319	pretixbase	0235_auto_20230316_2023	2024-06-03 21:59:15.942296+00
-320	pretixbase	0236_reusable_media	2024-06-03 21:59:16.87571+00
-321	pretixbase	0237_question_valid_string_length	2024-06-03 21:59:16.942714+00
-322	pretixbase	0238_giftcard_owner_ticket	2024-06-03 21:59:17.072124+00
-323	pretixbase	0239_giftcard_info	2024-06-03 21:59:17.243355+00
-324	pretixbase	0240_auto_20230516_1119	2024-06-03 21:59:17.377286+00
-325	pretixbase	0241_itemmetaproperties_required_values	2024-06-03 21:59:17.485004+00
-326	pretixbase	0242_auto_20230512_1008	2024-06-03 21:59:17.739938+00
-327	pretixbase	0243_device_os_name_and_os_version	2024-06-03 21:59:17.875753+00
-328	pretixbase	0244_mediumkeyset	2024-06-03 21:59:18.471305+00
-329	pretixbase	0245_discount_benefit_products	2024-06-03 21:59:18.781185+00
-330	pretixbase	0246_bigint	2024-06-03 21:59:30.868204+00
-331	pretixbase	0247_checkinlist	2024-06-03 21:59:31.119425+00
-332	pretixbase	0248_item_free_price_suggestion	2024-06-03 21:59:31.234591+00
-333	pretixbase	0249_hidden_if_item_available	2024-06-03 21:59:31.373983+00
-334	pretixbase	0250_eventmetaproperty_filter_public	2024-06-03 21:59:31.985017+00
-335	pretixbase	0251_order_invoice_dirty	2024-06-03 21:59:32.075803+00
-336	pretixbase	0252_logentry_organizer	2024-06-03 21:59:32.351653+00
-337	pretixbase	0253_checkin_info	2024-06-03 21:59:32.612912+00
-338	pretixbase	0254_alter_logentry_organizer_link_and_more	2024-06-03 21:59:32.816484+00
-339	pretixbase	0255_item_unavail_modes	2024-06-03 21:59:32.960527+00
-340	pretixbase	0256_itemvariation_unavail_modes	2024-06-03 21:59:33.054872+00
-341	pretixbase	0257_item_default_price_not_null	2024-06-03 21:59:33.175483+00
-342	pretixbase	0258_uniq_indx	2024-06-03 21:59:33.868316+00
-343	pretixbase	0259_team_require_2fa	2024-06-03 21:59:33.955836+00
-344	pretixbase	0260_alter_reusablemedium_index_together	2024-06-03 21:59:34.027358+00
-345	pretixbase	0261_userknownloginsource	2024-06-03 21:59:34.156007+00
-346	pretixbase	0262_subevent_comment	2024-06-03 21:59:34.223061+00
-347	pretixbase	0263_auto_20240409_0732	2024-06-03 21:59:34.347511+00
-348	pretixbase	0264_order_internal_secret	2024-06-03 21:59:34.430467+00
-349	pretixdroid	0003_appconfiguration	2024-06-03 21:59:35.86396+00
-350	pretixdroid	0004_auto_20171124_1657	2024-06-03 21:59:35.867981+00
-351	pretixdroid	0005_auto_20180106_2122	2024-06-03 21:59:35.871725+00
-352	pretixdroid	0004_delete_appconfiguration	2024-06-03 21:59:35.881517+00
-353	pretixhelpers	0001_initial	2024-06-03 21:59:35.903014+00
-354	pretixhelpers	0002_auto_20180320_1219	2024-06-03 21:59:35.915406+00
-355	pretixhelpers	0003_thumbnail_created	2024-06-03 21:59:35.925681+00
-356	pretixhelpers	0004_bigint	2024-06-03 21:59:35.946383+00
-357	pretixmultidomain	0001_initial	2024-06-03 21:59:36.071165+00
-358	pretixmultidomain	0002_knowndomain_event	2024-06-03 21:59:36.208164+00
-359	returnurl	0001_initial	2024-06-03 21:59:36.213046+00
-360	returnurl	0002_auto_20240301_1355	2024-06-03 21:59:36.35593+00
-361	sendmail	0001_initial	2024-06-03 21:59:36.623452+00
-362	sendmail	0002_rule_enabled	2024-06-03 21:59:36.699356+00
-363	sendmail	0003_rule_attach_ical	2024-06-03 21:59:36.770952+00
-364	sendmail	0004_rule_restrict_to_status	2024-06-03 21:59:37.363939+00
-365	sendmail	0005_rule_checked_in_status	2024-06-03 21:59:37.436979+00
-366	sendmail	0006_rule_subevent_alter_rule_checked_in_status	2024-06-03 21:59:37.630844+00
-367	sendmail	0007_bigint	2024-06-03 21:59:37.754358+00
-368	sessions	0001_initial	2024-06-03 21:59:37.772776+00
-369	stripe	0001_initial	2024-06-03 21:59:37.903558+00
-370	stripe	0002_referencedstripeobject_payment	2024-06-03 21:59:38.027878+00
-371	stripe	0003_registeredapplepaydomain	2024-06-03 21:59:38.039134+00
-372	stripe	0004_auto_20211208_1407	2024-06-03 21:59:38.168391+00
-373	stripe	0005_bigint	2024-06-03 21:59:38.239198+00
-374	ticketoutputpdf	0001_initial	2024-06-03 21:59:38.497248+00
-375	ticketoutputpdf	0002_auto_20180605_2022	2024-06-03 21:59:38.62686+00
-376	ticketoutputpdf	0003_auto_20180710_1321	2024-06-03 21:59:39.086823+00
-377	ticketoutputpdf	0004_auto_20180805_1430	2024-06-03 21:59:39.223336+00
-378	ticketoutputpdf	0003_auto_20180805_1432	2024-06-03 21:59:39.35611+00
-379	ticketoutputpdf	0005_merge_20180805_1436	2024-06-03 21:59:39.361509+00
-380	ticketoutputpdf	0006_auto_20181017_0024	2024-06-03 21:59:39.426454+00
-381	ticketoutputpdf	0007_auto_20181123_1059	2024-06-03 21:59:39.656535+00
-382	ticketoutputpdf	0008_bigint	2024-06-03 21:59:39.921349+00
-383	pretixbase	0001_squashed_0028_auto_20160816_1242	2024-06-03 21:59:39.934078+00
-384	pretixbase	0105_auto_20190112_1512_squashed_0107_auto_20190129_1337	2024-06-03 21:59:39.938527+00
-385	pretixbase	0077_auto_20171124_1629_squashed_0088_auto_20180328_1217	2024-06-03 21:59:39.942965+00
-386	pretixbase	0052_team_teaminvite_squashed_0070_auto_20170719_0910	2024-06-03 21:59:39.947395+00
-387	pretixbase	0031_auto_20160816_0648_squashed_0048_auto_20161129_1330	2024-06-03 21:59:39.951677+00
-388	pretixbase	0098_auto_20180731_1243_squashed_0100_item_require_approval	2024-06-03 21:59:39.955991+00
-389	pretixbase	0051_auto_20170206_2027_squashed_0057_auto_20170501_2116	2024-06-03 21:59:39.960446+00
-390	pretixbase	0108_auto_20190201_1527_squashed_0141_seat_sorting_rank	2024-06-03 21:59:39.964744+00
-391	pretixbase	0050_orderposition_positionid_squashed_0061_event_location	2024-06-03 21:59:39.969127+00
-392	pretixbase	0076_orderfee_squashed_0082_invoiceaddress_internal_reference	2024-06-03 21:59:39.973932+00
-393	pretixbase	0071_auto_20170729_1616_squashed_0075_auto_20170828_0901	2024-06-03 21:59:39.978328+00
-394	pretixbase	0090_auto_20180509_0917_squashed_0095_auto_20180604_1129	2024-06-03 21:59:39.982796+00
-395	pretixdroid	0003_appconfiguration_squashed_0005_auto_20180106_2122	2024-06-03 21:59:39.987169+00
-396	pretixbase	0265_saleschannel_and_more	2024-08-09 12:17:05.687526+00
-397	pretixbase	0266_saleschannel_migrate_data	2024-08-09 12:17:06.281146+00
-398	pretixbase	0267_remove_old_sales_channels	2024-08-09 12:17:06.887825+00
-399	pretixbase	0268_remove_subevent_items_remove_subevent_variations_and_more	2024-08-09 12:17:07.099207+00
-400	ticketoutputpdf	0009_sales_channels_new_fields	2024-08-09 12:17:07.290854+00
-401	ticketoutputpdf	0010_sales_channels_migrate_data	2024-08-09 12:17:07.397631+00
-402	ticketoutputpdf	0011_sales_channels_remove_old_fields	2024-08-09 12:17:07.816581+00
+1	contenttypes	0001_initial	2024-09-04 10:55:16.586021+00
+2	contenttypes	0002_remove_content_type_name	2024-09-04 10:55:16.602123+00
+3	auth	0001_initial	2024-09-04 10:55:16.665379+00
+4	auth	0002_alter_permission_name_max_length	2024-09-04 10:55:16.672827+00
+5	auth	0003_alter_user_email_max_length	2024-09-04 10:55:16.682836+00
+6	auth	0004_alter_user_username_opts	2024-09-04 10:55:16.694213+00
+7	auth	0005_alter_user_last_login_null	2024-09-04 10:55:16.703619+00
+8	auth	0006_require_contenttypes_0002	2024-09-04 10:55:16.708543+00
+9	auth	0007_alter_validators_add_error_messages	2024-09-04 10:55:16.718151+00
+10	auth	0008_alter_user_username_max_length	2024-09-04 10:55:16.727309+00
+11	auth	0009_alter_user_last_name_max_length	2024-09-04 10:55:16.736567+00
+12	auth	0010_alter_group_name_max_length	2024-09-04 10:55:16.748431+00
+13	auth	0011_update_proxy_permissions	2024-09-04 10:55:16.756345+00
+14	auth	0012_alter_user_first_name_max_length	2024-09-04 10:55:16.764907+00
+15	pretixbase	0001_initial	2024-09-04 10:55:18.817179+00
+16	pretixbase	0002_auto_20160209_0940	2024-09-04 10:55:18.820126+00
+17	pretixbase	0003_eventpermission_can_change_vouchers	2024-09-04 10:55:18.82246+00
+18	pretixbase	0004_auto_20160209_1023	2024-09-04 10:55:18.824855+00
+19	pretixbase	0005_auto_20160211_1459	2024-09-04 10:55:18.827195+00
+20	pretixbase	0006_auto_20160211_1630	2024-09-04 10:55:18.8295+00
+21	pretixbase	0007_auto_20160211_1710	2024-09-04 10:55:18.831869+00
+22	pretixbase	0008_invoiceaddress	2024-09-04 10:55:18.834223+00
+23	pretixbase	0009_auto_20160222_2002	2024-09-04 10:55:18.836601+00
+24	pretixbase	0010_orderposition_secret	2024-09-04 10:55:18.839164+00
+25	pretixbase	0011_auto_20160311_2052	2024-09-04 10:55:18.84159+00
+26	pretixbase	0012_auto_20160312_1040	2024-09-04 10:55:18.844099+00
+27	pretixbase	0013_invoice_locale	2024-09-04 10:55:18.8464+00
+28	pretixbase	0014_invoice_additional_text	2024-09-04 10:55:18.848763+00
+29	pretixbase	0015_auto_20160312_1924	2024-09-04 10:55:18.851193+00
+30	pretixbase	0016_voucher_variation	2024-09-04 10:55:18.853574+00
+31	pretixbase	0017_auto_20160324_1615	2024-09-04 10:55:18.856054+00
+32	pretixbase	0018_auto_20160326_1104	2024-09-04 10:55:18.858435+00
+33	pretixbase	0019_auto_20160326_1139	2024-09-04 10:55:18.860772+00
+34	pretixbase	0020_auto_20160418_2106	2024-09-04 10:55:18.863202+00
+35	pretixbase	0021_auto_20160418_2117	2024-09-04 10:55:18.865585+00
+36	pretixbase	0020_auto_20160421_1943	2024-09-04 10:55:18.867864+00
+37	pretixbase	0022_merge	2024-09-04 10:55:18.870157+00
+38	pretixbase	0023_auto_20160601_1039	2024-09-04 10:55:18.872474+00
+39	pretixbase	0024_auto_20160728_1725	2024-09-04 10:55:18.875059+00
+40	pretixbase	0025_auto_20160802_2202	2024-09-04 10:55:18.877417+00
+41	pretixbase	0026_order_comment	2024-09-04 10:55:18.879724+00
+42	pretixbase	0027_auto_20160815_1254	2024-09-04 10:55:18.882386+00
+43	pretixbase	0028_auto_20160816_1242	2024-09-04 10:55:18.885201+00
+44	pretixbase	0028_invoice_invoice_no_charfield	2024-09-04 10:55:18.928254+00
+45	pretixbase	0029_invoice_no_data	2024-09-04 10:55:18.965939+00
+46	pretixbase	0030_auto_20160816_0646	2024-09-04 10:55:19.024755+00
+47	pretixbase	0031_auto_20160816_0648	2024-09-04 10:55:19.877579+00
+48	pretixbase	0032_question_position	2024-09-04 10:55:19.880511+00
+49	pretixbase	0033_auto_20160821_2222	2024-09-04 10:55:19.883025+00
+50	pretixbase	0034_auto_20160830_1952	2024-09-04 10:55:19.885562+00
+51	pretixbase	0032_item_allow_cancel	2024-09-04 10:55:19.888165+00
+52	pretixbase	0033_auto_20160822_1044	2024-09-04 10:55:19.890604+00
+53	pretixbase	0035_merge	2024-09-04 10:55:19.893243+00
+54	pretixbase	0036_auto_20160902_0755	2024-09-04 10:55:19.89581+00
+55	pretixbase	0037_invoice_payment_provider_text	2024-09-04 10:55:19.898313+00
+56	pretixbase	0038_auto_20160924_1448	2024-09-04 10:55:19.900848+00
+57	pretixbase	0039_user_require_2fa	2024-09-04 10:55:19.903306+00
+58	pretixbase	0040_u2fdevice	2024-09-04 10:55:19.905952+00
+59	pretixbase	0041_auto_20161018_1654	2024-09-04 10:55:19.908492+00
+60	pretixbase	0042_order_expires	2024-09-04 10:55:19.911123+00
+61	pretixbase	0043_globalsetting	2024-09-04 10:55:19.913717+00
+62	pretixbase	0044_auto_20161101_1610	2024-09-04 10:55:19.91629+00
+63	pretixbase	0045_auto_20161108_1542	2024-09-04 10:55:19.918976+00
+64	pretixbase	0046_order_meta_info	2024-09-04 10:55:19.921479+00
+65	pretixbase	0047_auto_20161126_1300	2024-09-04 10:55:19.923903+00
+66	pretixbase	0048_auto_20161129_1330	2024-09-04 10:55:19.926477+00
+67	pretixdroid	0001_initial	2024-09-04 10:55:19.966549+00
+68	pretixdroid	0002_auto_20161208_1644	2024-09-04 10:55:19.980861+00
+69	pretixbase	0049_checkin	2024-09-04 10:55:20.272732+00
+70	pretixbase	0050_orderposition_positionid	2024-09-04 10:55:20.91088+00
+71	pretixbase	0051_auto_20161221_1720	2024-09-04 10:55:20.913521+00
+72	pretixbase	0052_auto_20161231_1533	2024-09-04 10:55:20.915957+00
+73	pretixbase	0053_auto_20170104_1252	2024-09-04 10:55:20.918425+00
+74	pretixbase	0054_auto_20170107_1058	2024-09-04 10:55:20.921118+00
+75	pretixbase	0055_organizerpermission_can_change_permissions	2024-09-04 10:55:20.923813+00
+76	pretixbase	0056_auto_20170107_1251	2024-09-04 10:55:20.926345+00
+77	pretixbase	0057_auto_20170107_1531	2024-09-04 10:55:20.928792+00
+78	pretixbase	0058_auto_20170107_1533	2024-09-04 10:55:20.931191+00
+79	pretixbase	0059_cachedcombinedticket	2024-09-04 10:55:20.933569+00
+80	pretixbase	0060_auto_20170113_1438	2024-09-04 10:55:20.936183+00
+81	pretixbase	0061_event_location	2024-09-04 10:55:20.938759+00
+82	pretixbase	0051_auto_20170206_2027	2024-09-04 10:55:21.826582+00
+83	pretixbase	0052_auto_20170324_1506	2024-09-04 10:55:21.829576+00
+84	pretixbase	0053_auto_20170409_1651	2024-09-04 10:55:21.832508+00
+85	pretixbase	0054_auto_20170413_1050	2024-09-04 10:55:21.835753+00
+86	pretixbase	0055_auto_20170413_1537	2024-09-04 10:55:21.838606+00
+87	pretixbase	0056_auto_20170414_1044	2024-09-04 10:55:21.842048+00
+88	pretixbase	0057_auto_20170501_2116	2024-09-04 10:55:21.845962+00
+89	pretixbase	0052_team_teaminvite	2024-09-04 10:55:23.809322+00
+90	pretixbase	0058_auto_20170429_1020	2024-09-04 10:55:23.812181+00
+91	pretixbase	0059_checkin_nonce	2024-09-04 10:55:23.814877+00
+92	pretixbase	0060_auto_20170510_1027	2024-09-04 10:55:23.817608+00
+93	pretixbase	0061_auto_20170521_0942	2024-09-04 10:55:23.820263+00
+94	pretixbase	0062_auto_20170602_0948	2024-09-04 10:55:23.822835+00
+95	pretixbase	0063_auto_20170702_1711	2024-09-04 10:55:23.82538+00
+96	pretixbase	0064_auto_20170703_0912	2024-09-04 10:55:23.827955+00
+97	pretixbase	0065_auto_20170707_0920	2024-09-04 10:55:23.83052+00
+98	pretixbase	0066_auto_20170708_2102	2024-09-04 10:55:23.833132+00
+99	pretixbase	0067_auto_20170712_1610	2024-09-04 10:55:23.835786+00
+100	pretixbase	0068_subevent_frontpage_text	2024-09-04 10:55:23.838453+00
+101	pretixbase	0069_invoice_prefix	2024-09-04 10:55:23.841225+00
+102	pretixbase	0070_auto_20170719_0910	2024-09-04 10:55:23.843975+00
+103	pretixbase	0071_auto_20170729_1616	2024-09-04 10:55:25.190253+00
+104	pretixbase	0072_order_download_reminder_sent	2024-09-04 10:55:25.193373+00
+105	pretixbase	0073_auto_20170716_1333	2024-09-04 10:55:25.196204+00
+106	pretixbase	0074_auto_20170825_1258	2024-09-04 10:55:25.199316+00
+107	pretixbase	0075_auto_20170828_0901	2024-09-04 10:55:25.202092+00
+108	pretixbase	0076_orderfee	2024-09-04 10:55:26.142479+00
+109	pretixbase	0077_auto_20170829_1126	2024-09-04 10:55:26.145566+00
+110	pretixbase	0078_auto_20171003_1650	2024-09-04 10:55:26.148314+00
+111	pretixbase	0079_auto_20171010_2117	2024-09-04 10:55:26.151028+00
+112	pretixbase	0080_auto_20171016_1553	2024-09-04 10:55:26.153586+00
+113	pretixbase	0081_quota_cached_availability_paid_orders	2024-09-04 10:55:26.156427+00
+114	pretixbase	0082_invoiceaddress_internal_reference	2024-09-04 10:55:26.159139+00
+115	pretixbase	0077_auto_20171124_1629	2024-09-04 10:55:28.434004+00
+116	pretixbase	0078_auto_20171206_1603	2024-09-04 10:55:28.436895+00
+117	pretixbase	0079_auto_20180115_0855	2024-09-04 10:55:28.439705+00
+118	pretixbase	0080_question_ask_during_checkin	2024-09-04 10:55:28.442466+00
+119	pretixbase	0081_auto_20180220_1031	2024-09-04 10:55:28.445405+00
+120	pretixbase	0082_auto_20180222_0938	2024-09-04 10:55:28.448242+00
+121	pretixbase	0083_auto_20180228_2102	2024-09-04 10:55:28.450891+00
+122	pretixbase	0084_questionoption_position	2024-09-04 10:55:28.453709+00
+123	pretixbase	0085_auto_20180312_1119	2024-09-04 10:55:28.456354+00
+124	pretixbase	0086_auto_20180320_1219	2024-09-04 10:55:28.459256+00
+125	pretixbase	0087_auto_20180317_1952	2024-09-04 10:55:28.462041+00
+126	pretixbase	0088_auto_20180328_1217	2024-09-04 10:55:28.465222+00
+127	badges	0001_initial	2024-09-04 10:55:28.926584+00
+128	badges	0002_auto_20190201_1424	2024-09-04 10:55:29.101575+00
+129	badges	0003_bigint	2024-09-04 10:55:29.234349+00
+130	pretixapi	0001_initial	2024-09-04 10:55:29.727747+00
+131	pretixbase	0089_auto_20180315_1322	2024-09-04 10:55:29.844858+00
+132	pretixbase	0090_auto_20180509_0917	2024-09-04 10:55:30.253859+00
+133	pretixbase	0091_auto_20180513_1641	2024-09-04 10:55:30.256841+00
+134	pretixbase	0092_auto_20180511_1224	2024-09-04 10:55:30.259713+00
+135	pretixbase	0093_auto_20180528_1432	2024-09-04 10:55:30.262598+00
+136	pretixbase	0094_auto_20180604_1119	2024-09-04 10:55:30.265615+00
+137	pretixbase	0095_auto_20180604_1129	2024-09-04 10:55:30.268731+00
+138	pretixbase	0096_auto_20180722_0801	2024-09-04 10:55:30.687591+00
+139	pretixbase	0097_auto_20180722_0804	2024-09-04 10:55:31.282995+00
+140	pretixbase	0098_auto_20180731_1243	2024-09-04 10:55:32.026936+00
+141	pretixbase	0099_auto_20180807_0841	2024-09-04 10:55:32.029663+00
+142	pretixbase	0100_item_require_approval	2024-09-04 10:55:32.032312+00
+143	pretixbase	0099_auto_20180912_1035	2024-09-04 10:55:32.263418+00
+144	pretixbase	0100_auto_20181023_2300	2024-09-04 10:55:33.072847+00
+145	pretixbase	0101_auto_20181025_2255	2024-09-04 10:55:33.150226+00
+146	pretixbase	0102_auto_20181017_0024	2024-09-04 10:55:33.829159+00
+147	pretixbase	0103_auto_20181121_1224	2024-09-04 10:55:33.963032+00
+148	pretixbase	0104_auto_20181114_1526	2024-09-04 10:55:34.503613+00
+149	pretixbase	0105_auto_20190112_1512	2024-09-04 10:55:34.777653+00
+150	pretixbase	0106_auto_20190118_1527	2024-09-04 10:55:34.780518+00
+151	pretixbase	0107_auto_20190129_1337	2024-09-04 10:55:34.78329+00
+152	pretixbase	0108_auto_20190201_1527	2024-09-04 10:55:41.137823+00
+153	pretixbase	0109_auto_20190208_1432	2024-09-04 10:55:41.140999+00
+154	pretixbase	0110_auto_20190219_1245	2024-09-04 10:55:41.143947+00
+155	pretixbase	0111_auto_20190219_0949	2024-09-04 10:55:41.146987+00
+156	pretixbase	0112_auto_20190304_1726	2024-09-04 10:55:41.150009+00
+157	pretixbase	0113_auto_20190312_0942	2024-09-04 10:55:41.15292+00
+158	pretixbase	0114_auto_20190316_1014	2024-09-04 10:55:41.155859+00
+159	pretixbase	0115_auto_20190323_2238	2024-09-04 10:55:41.158881+00
+160	pretixbase	0116_auto_20190402_0722	2024-09-04 10:55:41.161911+00
+161	pretixbase	0117_auto_20190418_1149	2024-09-04 10:55:41.165152+00
+162	pretixbase	0118_auto_20190423_0839	2024-09-04 10:55:41.168503+00
+163	pretixbase	0119_auto_20190509_0654	2024-09-04 10:55:41.171822+00
+164	pretixbase	0120_auto_20190509_0736	2024-09-04 10:55:41.175092+00
+165	pretixbase	0121_order_email_known_to_work	2024-09-04 10:55:41.178514+00
+166	pretixbase	0122_orderposition_web_secret	2024-09-04 10:55:41.181817+00
+167	pretixbase	0123_auto_20190530_1035	2024-09-04 10:55:41.185141+00
+168	pretixbase	0124_seat_seat_guid	2024-09-04 10:55:41.188396+00
+169	pretixbase	0125_voucher_show_hidden_items	2024-09-04 10:55:41.191624+00
+170	pretixbase	0126_item_show_quota_left	2024-09-04 10:55:41.194929+00
+171	pretixbase	0127_auto_20190711_0705	2024-09-04 10:55:41.19798+00
+172	pretixbase	0128_auto_20190715_1510	2024-09-04 10:55:41.201021+00
+173	pretixbase	0129_auto_20190724_1548	2024-09-04 10:55:41.204076+00
+174	pretixbase	0130_auto_20190729_1311	2024-09-04 10:55:41.20712+00
+175	pretixbase	0131_auto_20190729_1422	2024-09-04 10:55:41.2102+00
+176	pretixbase	0132_auto_20190808_1253	2024-09-04 10:55:41.213375+00
+177	pretixbase	0133_auto_20190830_1513	2024-09-04 10:55:41.216458+00
+178	pretixbase	0134_auto_20190909_1042	2024-09-04 10:55:41.219554+00
+179	pretixbase	0135_auto_20191007_0803	2024-09-04 10:55:41.222833+00
+180	pretixbase	0136_auto_20190918_1742	2024-09-04 10:55:41.225879+00
+181	pretixbase	0137_auto_20191015_1141	2024-09-04 10:55:41.228836+00
+182	pretixbase	0138_auto_20191017_1151	2024-09-04 10:55:41.232063+00
+183	pretixbase	0139_auto_20191019_1317	2024-09-04 10:55:41.235243+00
+184	pretixbase	0140_voucher_seat	2024-09-04 10:55:41.238408+00
+185	pretixbase	0141_seat_sorting_rank	2024-09-04 10:55:41.241502+00
+186	pretixbase	0142_auto_20191215_1522	2024-09-04 10:55:41.452828+00
+187	pretixbase	0143_auto_20200217_1211	2024-09-04 10:55:41.638792+00
+188	pretixbase	0144_invoiceaddress_custom_field	2024-09-04 10:55:41.761877+00
+189	pretixbase	0145_auto_20200210_1038	2024-09-04 10:55:41.999841+00
+190	pretixbase	0146_giftcardtransaction_text	2024-09-04 10:55:42.047551+00
+191	pretixbase	0147_user_session_token	2024-09-04 10:55:42.074724+00
+192	pretixbase	0148_cancellationrequest	2024-09-04 10:55:42.196587+00
+193	pretixbase	0149_order_cancellation_date	2024-09-04 10:55:42.380381+00
+194	pretixbase	0150_auto_20200401_1123	2024-09-04 10:55:43.345321+00
+195	pretixbase	0151_auto_20200421_0737	2024-09-04 10:55:43.47558+00
+196	pretixbase	0152_auto_20200511_1504	2024-09-04 10:55:44.283854+00
+197	pretixbase	0153_auto_20200528_1953	2024-09-04 10:55:44.56205+00
+198	pretixbase	0154_auto_20200620_1633	2024-09-04 10:55:44.711261+00
+199	pretixbase	0155_quota_release_after_exit	2024-09-04 10:55:44.796836+00
+200	pretixbase	0156_cartposition_override_tax_rate	2024-09-04 10:55:44.896375+00
+201	pretixbase	0157_auto_20200712_0932	2024-09-04 10:55:44.953386+00
+202	pretixbase	0158_auto_20200724_0754	2024-09-04 10:55:45.313613+00
+203	pretixbase	0159_mails_by_sales_channel	2024-09-04 10:55:45.389542+00
+204	pretixbase	0160_multiple_confirm_texts	2024-09-04 10:55:45.460465+00
+205	pretixbase	0161_order_changes_retain_old_default	2024-09-04 10:55:45.534051+00
+206	pretixbase	0162_remove_seat_name	2024-09-04 10:55:45.587879+00
+207	banktransfer	0001_initial	2024-09-04 10:55:45.812994+00
+208	banktransfer	0002_auto_20160908_2020	2024-09-04 10:55:46.354003+00
+209	banktransfer	0003_banktransaction_comment	2024-09-04 10:55:46.409821+00
+210	banktransfer	0004_auto_20170619_1125	2024-09-04 10:55:46.782664+00
+211	banktransfer	0005_auto_20181023_2209	2024-09-04 10:55:46.859633+00
+212	banktransfer	0006_auto_20200901_1419	2024-09-04 10:55:47.007288+00
+213	banktransfer	0007_refundexport	2024-09-04 10:55:47.098098+00
+214	banktransfer	0008_alter_banktransaction_amount	2024-09-04 10:55:47.148684+00
+215	banktransfer	0009_banktransaction_currency	2024-09-04 10:55:47.360433+00
+216	banktransfer	0010_bigint	2024-09-04 10:55:47.599072+00
+217	banktransfer	0011_banktransaction_external_id	2024-09-04 10:55:47.660963+00
+218	pretixbase	0163_device_security_profile	2024-09-04 10:55:47.71094+00
+219	pretixbase	0164_subevent_last_modified	2024-09-04 10:55:47.767028+00
+220	pretixbase	0165_auto_20201015_1924	2024-09-04 10:55:47.91205+00
+221	pretixbase	0166_auto_20201015_2029	2024-09-04 10:55:48.224891+00
+222	pretixbase	0167_checkinlist_exit_all_at	2024-09-04 10:55:48.275495+00
+223	pretixbase	0168_auto_20201023_1447	2024-09-04 10:55:48.516654+00
+224	pretixbase	0169_checkinlist_gates	2024-09-04 10:55:48.610379+00
+225	pretixbase	0170_remove_hidden_urls	2024-09-04 10:55:48.687826+00
+226	pretixbase	0171_auto_20201126_1635	2024-09-04 10:55:49.042387+00
+227	pretixbase	0172_event_sales_channels	2024-09-04 10:55:49.090419+00
+228	pretixbase	0173_auto_20201211_1648	2024-09-04 10:55:49.292621+00
+229	pretixbase	0162b_auto_20201218_1810	2024-09-04 10:55:49.305301+00
+230	pretixbase	0174_merge_20201222_1031	2024-09-04 10:55:49.310007+00
+231	pretixbase	0175_orderrefund_comment	2024-09-04 10:55:49.331639+00
+232	pretixbase	0176_auto_20210205_1512	2024-09-04 10:55:49.393944+00
+233	pretixbase	0177_auto_20210301_1510	2024-09-04 10:55:49.542891+00
+234	pretixbase	0178_auto_20210308_1326	2024-09-04 10:55:50.009611+00
+235	pretixbase	0179_auto_20210311_1653	2024-09-04 10:55:50.090663+00
+236	pretixbase	0180_auto_20210324_1309	2024-09-04 10:55:50.309468+00
+237	pretixbase	0181_team_can_checkin_orders	2024-09-04 10:55:50.369073+00
+238	pretixbase	0182_question_valid_file_portrait	2024-09-04 10:55:50.423929+00
+239	pretixbase	0183_auto_20210423_0829	2024-09-04 10:55:50.541971+00
+240	pretixbase	0184_customer	2024-09-04 10:55:50.849444+00
+241	pretixbase	0185_memberships	2024-09-04 10:55:51.952952+00
+242	pretixbase	0186_invoice_sent_to_organizer	2024-09-04 10:55:52.012475+00
+243	pretixbase	0187_normalize_salutation	2024-09-04 10:55:52.579929+00
+244	pretixbase	0188_delete_requiredaction	2024-09-04 10:55:52.587749+00
+245	pretixbase	0189_auto_20210525_1311	2024-09-04 10:55:52.699854+00
+246	pretixbase	0190_quota_ignore_for_event_availability	2024-09-04 10:55:52.755686+00
+247	pretixbase	0191_event_last_modified	2024-09-04 10:55:52.811553+00
+248	pretixbase	0192_checkin_more_fields	2024-09-04 10:55:53.332579+00
+249	pretixbase	0193_auto_20210611_1355	2024-09-04 10:55:53.437647+00
+250	pretixbase	0194_membership_canceled	2024-09-04 10:55:53.469907+00
+251	pretixbase	0195_auto_20210622_1457	2024-09-04 10:55:53.818897+00
+252	pretixbase	0196_auto_20210523_1322	2024-09-04 10:55:53.996513+00
+253	pretixbase	0197_auto_20210914_0814	2024-09-04 10:55:54.141399+00
+254	pretixbase	0198_invoice_sent_to_customer	2024-09-04 10:55:54.201042+00
+255	pretixbase	0199_auto_20211005_1050	2024-09-04 10:55:54.295986+00
+256	pretixbase	0200_transaction	2024-09-04 10:55:54.414689+00
+257	pretixbase	0201_invoiceline_event_location	2024-09-04 10:55:54.457993+00
+258	pretixbase	0202_user_needs_password_change	2024-09-04 10:55:54.483532+00
+259	pretixbase	0203_orderposition_is_bundled	2024-09-04 10:55:54.543579+00
+260	pretixbase	0204_orderposition_backfill_is_bundled	2024-09-04 10:55:54.630047+00
+261	pretixbase	0205_itemvariation_require_approval	2024-09-04 10:55:54.673391+00
+262	pretixbase	0206_customer_phone	2024-09-04 10:55:54.703289+00
+263	pretixbase	0207_auto_20220119_1427	2024-09-04 10:55:54.795897+00
+264	pretixbase	0208_auto_20220214_1632	2024-09-04 10:55:54.846962+00
+265	pretixbase	0209_device_info	2024-09-04 10:55:54.897841+00
+266	pretixbase	0210_auto_20220303_2017	2024-09-04 10:55:55.842061+00
+267	pretixbase	0211_auto_20220314_2001	2024-09-04 10:55:55.929917+00
+268	pretixbase	0212_auto_20220318_1408	2024-09-04 10:55:56.160413+00
+269	pretixbase	0213_discount_condition_ignore_voucher_discounted	2024-09-04 10:55:56.21952+00
+270	pretixbase	0214_customer_notes_ext_id	2024-09-04 10:55:56.275954+00
+271	pretixbase	0215_customer_organizer_identifier_unique	2024-09-04 10:55:56.342057+00
+272	pretixbase	0216_checkin_forced_sent	2024-09-04 10:55:56.397104+00
+273	pretixbase	0217_eventfooterlink_organizerfooterlink	2024-09-04 10:55:56.601545+00
+274	pretixbase	0218_checkinlist_addon_match	2024-09-04 10:55:56.662097+00
+275	pretixbase	0219_auto_20220706_0913	2024-09-04 10:55:56.861204+00
+276	pretixbase	0220_auto_20220811_1002	2024-09-04 10:55:57.545276+00
+277	pretixbase	0221_clean_nonunique_question_identifiers	2024-09-04 10:55:57.640861+00
+278	pretixbase	0222_alter_question_unique_together	2024-09-04 10:55:57.706878+00
+279	pretixbase	0223_voucher_min_usages	2024-09-04 10:55:57.772191+00
+280	pretixbase	0224_eventmetaproperty_filter_allowed	2024-09-04 10:55:57.807608+00
+281	pretixbase	0225_orderpayment_process_initiated	2024-09-04 10:55:57.833902+00
+282	pretixbase	0226_itemvariationmetavalue	2024-09-04 10:55:57.948961+00
+283	pretixapi	0002_auto_20180604_1120	2024-09-04 10:55:58.159212+00
+284	pretixapi	0003_webhook_webhookcall_webhookeventlistener	2024-09-04 10:55:59.070986+00
+285	pretixapi	0004_auto_20190405_1048	2024-09-04 10:55:59.113412+00
+286	pretixapi	0005_auto_20191028_1541	2024-09-04 10:55:59.157989+00
+287	pretixapi	0006_alter_webhook_target_url	2024-09-04 10:55:59.245807+00
+288	pretixapi	0007_alter_webhookcall_target_url	2024-09-04 10:55:59.262734+00
+289	pretixapi	0008_webhookcallretry	2024-09-04 10:55:59.38654+00
+290	pretixapi	0009_auto_20221217_1847	2024-09-04 10:55:59.810146+00
+291	oauth2_provider	0001_initial	2024-09-04 10:56:00.337783+00
+292	oauth2_provider	0002_auto_20190406_1805	2024-09-04 10:56:00.392144+00
+293	oauth2_provider	0003_auto_20201211_1314	2024-09-04 10:56:00.424363+00
+294	oauth2_provider	0004_auto_20200902_2022	2024-09-04 10:56:01.427494+00
+295	oauth2_provider	0005_auto_20211222_2352	2024-09-04 10:56:01.919108+00
+296	oauth2_provider	0006_alter_application_client_secret	2024-09-04 10:56:02.050868+00
+297	oauth2_provider	0007_application_post_logout_redirect_uris	2024-09-04 10:56:02.079918+00
+298	otp_static	0001_initial	2024-09-04 10:56:02.29764+00
+299	otp_static	0002_throttling	2024-09-04 10:56:02.350969+00
+300	otp_static	0003_add_timestamps	2024-09-04 10:56:02.405063+00
+301	otp_totp	0001_initial	2024-09-04 10:56:02.520802+00
+302	otp_totp	0002_auto_20190420_0723	2024-09-04 10:56:02.572746+00
+303	otp_totp	0003_add_timestamps	2024-09-04 10:56:02.62999+00
+304	paypal	0001_initial	2024-09-04 10:56:02.751989+00
+305	paypal	0002_referencedpaypalobject_payment	2024-09-04 10:56:03.129032+00
+306	paypal	0003_migrate_to_v2	2024-09-04 10:56:03.241993+00
+307	paypal	0004_bigint	2024-09-04 10:56:03.284658+00
+308	pretixapi	0010_webhook_comment	2024-09-04 10:56:03.353667+00
+309	pretixapi	0011_bigint	2024-09-04 10:56:04.068678+00
+310	pretixapi	0012_oauthapplication_post_logout_redirect_uris	2024-09-04 10:56:04.103026+00
+311	pretixbase	0227_item_personalized	2024-09-04 10:56:04.269943+00
+312	pretixbase	0228_scheduledeventexport_scheduledorganizerexport	2024-09-04 10:56:04.503962+00
+313	pretixbase	0229_invoice_payment_provider_stamp	2024-09-04 10:56:04.579322+00
+314	pretixbase	0230_auto_20230208_0939	2024-09-04 10:56:05.260805+00
+315	pretixbase	0231_auto_20230208_1546	2024-09-04 10:56:05.86598+00
+316	pretixbase	0232_exchangerate	2024-09-04 10:56:05.954089+00
+317	pretixbase	0233_ignore_from_quota_while_blocked	2024-09-04 10:56:06.018387+00
+318	pretixbase	0234_total_ordering	2024-09-04 10:56:06.864192+00
+319	pretixbase	0235_auto_20230316_2023	2024-09-04 10:56:09.026132+00
+320	pretixbase	0236_reusable_media	2024-09-04 10:56:09.533188+00
+321	pretixbase	0237_question_valid_string_length	2024-09-04 10:56:09.600249+00
+322	pretixbase	0238_giftcard_owner_ticket	2024-09-04 10:56:09.724023+00
+323	pretixbase	0239_giftcard_info	2024-09-04 10:56:09.888533+00
+324	pretixbase	0240_auto_20230516_1119	2024-09-04 10:56:10.018449+00
+325	pretixbase	0241_itemmetaproperties_required_values	2024-09-04 10:56:10.123929+00
+326	pretixbase	0242_auto_20230512_1008	2024-09-04 10:56:10.666022+00
+327	pretixbase	0243_device_os_name_and_os_version	2024-09-04 10:56:10.800854+00
+328	pretixbase	0244_mediumkeyset	2024-09-04 10:56:11.031555+00
+329	pretixbase	0245_discount_benefit_products	2024-09-04 10:56:11.341682+00
+330	pretixbase	0246_bigint	2024-09-04 10:56:23.431738+00
+331	pretixbase	0247_checkinlist	2024-09-04 10:56:23.756462+00
+332	pretixbase	0248_item_free_price_suggestion	2024-09-04 10:56:23.871267+00
+333	pretixbase	0249_hidden_if_item_available	2024-09-04 10:56:23.997426+00
+334	pretixbase	0250_eventmetaproperty_filter_public	2024-09-04 10:56:24.28908+00
+335	pretixbase	0251_order_invoice_dirty	2024-09-04 10:56:24.360754+00
+336	pretixbase	0252_logentry_organizer	2024-09-04 10:56:24.888212+00
+337	pretixbase	0253_checkin_info	2024-09-04 10:56:25.13078+00
+338	pretixbase	0254_alter_logentry_organizer_link_and_more	2024-09-04 10:56:25.327844+00
+339	pretixbase	0255_item_unavail_modes	2024-09-04 10:56:25.461099+00
+340	pretixbase	0256_itemvariation_unavail_modes	2024-09-04 10:56:25.555597+00
+341	pretixbase	0257_item_default_price_not_null	2024-09-04 10:56:25.678003+00
+342	pretixbase	0258_uniq_indx	2024-09-04 10:56:26.088687+00
+343	pretixbase	0259_team_require_2fa	2024-09-04 10:56:26.176464+00
+344	pretixbase	0260_alter_reusablemedium_index_together	2024-09-04 10:56:26.538076+00
+345	pretixbase	0261_userknownloginsource	2024-09-04 10:56:26.671871+00
+346	pretixbase	0262_subevent_comment	2024-09-04 10:56:26.742924+00
+347	pretixbase	0263_auto_20240409_0732	2024-09-04 10:56:26.864235+00
+348	pretixbase	0264_order_internal_secret	2024-09-04 10:56:26.947858+00
+349	pretixbase	0265_saleschannel_and_more	2024-09-04 10:56:28.562844+00
+350	pretixbase	0266_saleschannel_migrate_data	2024-09-04 10:56:28.710979+00
+351	pretixbase	0267_remove_old_sales_channels	2024-09-04 10:56:29.244038+00
+352	pretixbase	0268_remove_subevent_items_remove_subevent_variations_and_more	2024-09-04 10:56:29.56039+00
+353	pretixbase	0269_order_api_meta	2024-09-04 10:56:29.652961+00
+354	pretixdroid	0003_appconfiguration	2024-09-04 10:56:31.07964+00
+355	pretixdroid	0004_auto_20171124_1657	2024-09-04 10:56:31.083748+00
+356	pretixdroid	0005_auto_20180106_2122	2024-09-04 10:56:31.087817+00
+357	pretixdroid	0004_delete_appconfiguration	2024-09-04 10:56:31.098225+00
+358	pretixhelpers	0001_initial	2024-09-04 10:56:31.120799+00
+359	pretixhelpers	0002_auto_20180320_1219	2024-09-04 10:56:31.13424+00
+360	pretixhelpers	0003_thumbnail_created	2024-09-04 10:56:31.146939+00
+361	pretixhelpers	0004_bigint	2024-09-04 10:56:31.172379+00
+362	pretixmultidomain	0001_initial	2024-09-04 10:56:31.376941+00
+363	pretixmultidomain	0002_knowndomain_event	2024-09-04 10:56:31.50315+00
+364	returnurl	0001_initial	2024-09-04 10:56:31.508071+00
+365	returnurl	0002_auto_20240301_1355	2024-09-04 10:56:31.635199+00
+366	sendmail	0001_initial	2024-09-04 10:56:32.193972+00
+367	sendmail	0002_rule_enabled	2024-09-04 10:56:32.269192+00
+368	sendmail	0003_rule_attach_ical	2024-09-04 10:56:32.348234+00
+369	sendmail	0004_rule_restrict_to_status	2024-09-04 10:56:32.629811+00
+370	sendmail	0005_rule_checked_in_status	2024-09-04 10:56:32.704728+00
+371	sendmail	0006_rule_subevent_alter_rule_checked_in_status	2024-09-04 10:56:32.900821+00
+372	sendmail	0007_bigint	2024-09-04 10:56:33.026772+00
+373	sessions	0001_initial	2024-09-04 10:56:33.044949+00
+374	stripe	0001_initial	2024-09-04 10:56:33.17574+00
+375	stripe	0002_referencedstripeobject_payment	2024-09-04 10:56:33.301774+00
+376	stripe	0003_registeredapplepaydomain	2024-09-04 10:56:33.312276+00
+377	stripe	0004_auto_20211208_1407	2024-09-04 10:56:33.445267+00
+378	stripe	0005_bigint	2024-09-04 10:56:33.508798+00
+379	ticketoutputpdf	0001_initial	2024-09-04 10:56:34.048478+00
+380	ticketoutputpdf	0002_auto_20180605_2022	2024-09-04 10:56:34.179078+00
+381	ticketoutputpdf	0003_auto_20180710_1321	2024-09-04 10:56:34.308755+00
+382	ticketoutputpdf	0004_auto_20180805_1430	2024-09-04 10:56:34.443126+00
+383	ticketoutputpdf	0003_auto_20180805_1432	2024-09-04 10:56:34.573948+00
+384	ticketoutputpdf	0005_merge_20180805_1436	2024-09-04 10:56:34.580267+00
+385	ticketoutputpdf	0006_auto_20181017_0024	2024-09-04 10:56:34.643887+00
+386	ticketoutputpdf	0007_auto_20181123_1059	2024-09-04 10:56:34.875082+00
+387	ticketoutputpdf	0008_bigint	2024-09-04 10:56:35.137692+00
+388	ticketoutputpdf	0009_sales_channels_new_fields	2024-09-04 10:56:35.415909+00
+389	ticketoutputpdf	0010_sales_channels_migrate_data	2024-09-04 10:56:35.838437+00
+390	ticketoutputpdf	0011_sales_channels_remove_old_fields	2024-09-04 10:56:36.017409+00
+391	pretixbase	0076_orderfee_squashed_0082_invoiceaddress_internal_reference	2024-09-04 10:56:36.029481+00
+392	pretixbase	0051_auto_20170206_2027_squashed_0057_auto_20170501_2116	2024-09-04 10:56:36.034031+00
+393	pretixbase	0108_auto_20190201_1527_squashed_0141_seat_sorting_rank	2024-09-04 10:56:36.038632+00
+394	pretixbase	0071_auto_20170729_1616_squashed_0075_auto_20170828_0901	2024-09-04 10:56:36.043129+00
+395	pretixbase	0031_auto_20160816_0648_squashed_0048_auto_20161129_1330	2024-09-04 10:56:36.047734+00
+396	pretixbase	0105_auto_20190112_1512_squashed_0107_auto_20190129_1337	2024-09-04 10:56:36.052117+00
+397	pretixbase	0052_team_teaminvite_squashed_0070_auto_20170719_0910	2024-09-04 10:56:36.056601+00
+398	pretixbase	0098_auto_20180731_1243_squashed_0100_item_require_approval	2024-09-04 10:56:36.060851+00
+399	pretixbase	0077_auto_20171124_1629_squashed_0088_auto_20180328_1217	2024-09-04 10:56:36.065208+00
+400	pretixbase	0050_orderposition_positionid_squashed_0061_event_location	2024-09-04 10:56:36.069655+00
+401	pretixbase	0090_auto_20180509_0917_squashed_0095_auto_20180604_1129	2024-09-04 10:56:36.074072+00
+402	pretixbase	0001_squashed_0028_auto_20160816_1242	2024-09-04 10:56:36.078697+00
+403	pretixdroid	0003_appconfiguration_squashed_0005_auto_20180106_2122	2024-09-04 10:56:36.08318+00
 \.
 
 
@@ -5843,8 +5829,7 @@ COPY public.pretixbase_checkin (id, datetime, position_id, nonce, list_id, auto_
 --
 
 COPY public.pretixbase_checkinlist (id, name, all_products, event_id, subevent_id, include_pending, allow_entry_after_exit, allow_multiple_entries, rules, exit_all_at, addon_match, consider_tickets_used, ignore_in_statistics) FROM stdin;
-1	Standard	t	5	\N	f	t	f	{}	\N	f	t	f
-2	Standard	t	6	\N	f	t	f	{}	\N	f	t	f
+1	Standard	t	1	\N	f	t	f	{}	\N	f	t	f
 \.
 
 
@@ -5965,10 +5950,7 @@ COPY public.pretixbase_discount_limit_sales_channels (id, discount_id, saleschan
 --
 
 COPY public.pretixbase_event (id, name, slug, currency, date_from, date_to, is_public, presale_end, presale_start, plugins, organizer_id, live, location, date_admission, comment, has_subevents, testmode, seating_plan_id, geo_lat, geo_lon, last_modified, all_sales_channels) FROM stdin;
-1	{"da": "dpl-cms-default-template"}	dpl-cms-default-template	DKK	2000-12-31 23:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-06-10 13:40:04.514881+00	t
-4	{"da": "dpl-cms-default-template-no-product-variations"}	dpl-cms-default-template-no-product-variations	DKK	2001-01-01 00:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin	1	f	{}	\N	\N	t	t	\N	\N	\N	2024-08-28 11:01:06.957924+00	t
-5	{"da": "dpl-cms-template-single"}	dpl-cms-template-single	DKK	2001-01-01 00:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin,pretix.plugins.ticketoutputpdf	1	f	{}	\N	\N	f	t	\N	\N	\N	2024-09-02 12:29:51.449737+00	t
-6	{"da": "dpl-cms-template-single-payment"}	dpl-cms-template-single-payment	DKK	2000-12-31 23:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin,pretix.plugins.ticketoutputpdf,pretix.plugins.manualpayment	1	f	{}	\N	\N	f	t	\N	\N	\N	2024-09-03 10:22:21.942703+00	t
+1	{"da": "dpl-cms-singular-no-payment"}	dpl-cms-singular-no-payment	DKK	2000-12-31 23:00:00+00	\N	t	\N	\N	pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin,pretix.plugins.ticketoutputpdf	1	f	{}	\N	\N	f	t	\N	\N	\N	2024-09-04 10:59:01.796971+00	t
 \.
 
 
@@ -5988,7 +5970,6 @@ COPY public.pretixbase_event_settingsstore (id, key, value, object_id) FROM stdi
 1	invoice_renderer	modern1	1
 2	invoice_include_expire_date	True	1
 3	invoice_renderer_highlight_order_code	True	1
-4	ticketoutput_pdf__enabled	True	1
 5	ticketoutput_passbook__enabled	True	1
 6	event_list_type	calendar	1
 7	invoice_email_attachment	True	1
@@ -5996,109 +5977,20 @@ COPY public.pretixbase_event_settingsstore (id, key, value, object_id) FROM stdi
 9	payment_banktransfer_invoice_immediately	True	1
 10	low_availability_percentage	10	1
 11	timezone	Europe/Copenhagen	1
-14	name_scheme_titles		1
-15	imprint_url		1
-16	presale_has_ended_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-17	voucher_explanation_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-18	checkout_success_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
 12	locale	da	1
-19	region	DK	1
-20	waiting_list_phones_explanation_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-21	contact_mail		1
-22	frontpage_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-23	event_info_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-24	attendee_data_explanation_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-25	checkout_phone_helptext	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-26	banner_text	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-27	banner_text_bottom	{"en": "", "de": "", "de-informal": "", "ar": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "es": "", "tr": "", "uk": ""}	1
-28	primary_color	#8e44b3	1
-30	presale_css_file	pub/dpl-cms/dpl-cms-default-template/presale.192b0ef5b10e5a6d.css	1
-31	presale_css_checksum	192b0ef5b10e5a6dccaf93873dc92ce6ab6a0c0a	1
-32	presale_widget_css_file	pub/dpl-cms/dpl-cms-default-template/widget.bd84297e08e69618.css	1
-33	presale_widget_css_checksum	bd84297e08e69618288e6abb3db27c9ffbd18b41	1
 13	locales	["da"]	1
-29	confirm_texts	[]	1
-52	invoice_renderer	modern1	4
-53	invoice_include_expire_date	True	4
-54	invoice_renderer_highlight_order_code	True	4
-55	ticketoutput_pdf__enabled	True	4
-56	ticketoutput_passbook__enabled	True	4
-57	event_list_type	calendar	4
-58	invoice_email_attachment	True	4
-59	name_scheme	given_family	4
-60	payment_banktransfer_invoice_immediately	True	4
-61	low_availability_percentage	10	4
-62	timezone	UTC	4
-63	locale	da	4
-64	locales	["da"]	4
-65	invoice_renderer	modern1	5
-66	invoice_include_expire_date	True	5
-67	invoice_renderer_highlight_order_code	True	5
-69	ticketoutput_passbook__enabled	True	5
-70	event_list_type	calendar	5
-71	invoice_email_attachment	True	5
-72	name_scheme	given_family	5
-73	payment_banktransfer_invoice_immediately	True	5
-74	low_availability_percentage	10	5
-75	timezone	UTC	5
-76	locale	da	5
-77	locales	["da"]	5
-78	ticket_download	True	5
-68	ticketoutput_pdf__enabled	True	5
-79	show_quota_left	False	5
-80	waiting_list_enabled	True	5
-81	attendee_names_required	False	5
-82	contact_mail		5
-83	imprint_url		5
-84	payment_free__fee_reverse_calc	True	5
-85	payment_boxoffice__fee_reverse_calc	True	5
-86	payment_offsetting__fee_reverse_calc	True	5
-87	payment_manual__fee_reverse_calc	True	5
-88	payment_giftcard__fee_reverse_calc	True	5
-89	invoice_renderer	modern1	6
-90	invoice_include_expire_date	True	6
-91	invoice_renderer_highlight_order_code	True	6
-93	ticketoutput_passbook__enabled	True	6
-94	event_list_type	calendar	6
-95	invoice_email_attachment	True	6
-96	name_scheme	given_family	6
-97	payment_banktransfer_invoice_immediately	True	6
-98	low_availability_percentage	10	6
-99	timezone	Europe/Copenhagen	6
-100	locale	da	6
-101	locales	["da"]	6
-102	ticket_download	True	6
-92	ticketoutput_pdf__enabled	True	6
-103	show_quota_left	False	6
-104	waiting_list_enabled	True	6
-105	attendee_names_required	False	6
-106	contact_mail		6
-107	imprint_url		6
-108	payment_free__fee_reverse_calc	True	6
-109	payment_boxoffice__fee_reverse_calc	True	6
-110	payment_offsetting__fee_reverse_calc	True	6
-111	payment_manual__fee_reverse_calc	True	6
-112	payment_giftcard__fee_reverse_calc	True	6
-113	payment_manual__hidden_seed	7KW2CtaEh49ThDSsqUa5VeAQNWqRSsYrugOtATcWjhnZih4N876F6vMlPbEITVjt	6
-114	payment_giftcard__hidden_seed	kxPneb4NyaLCcqipseeBCnt4TXksaqBZsFqbItapJDyHqG2e3MMSDKZOjcAOjrtC	6
-115	payment_manual__enabled	True	6
-116	payment_manual_public_name	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "Manual payment", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
-117	payment_manual_checkout_description	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "Manual payment", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
-118	payment_manual_email_instructions	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "Manual payment", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
-119	payment_manual_pending_description	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "Manual payment", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
-120	payment_manual_invoice_immediately	False	6
-121	payment_manual__invoice_text	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
-122	payment_manual__restricted_countries	[]	6
-123	payment_manual__restrict_to_sales_channels	["web"]	6
-124	payment_manual__hidden	False	6
-125	payment_manual__prevent_reminder_mail	False	6
-126	payment_giftcard__enabled	False	6
-127	payment_giftcard__restricted_countries	[]	6
-128	payment_giftcard__restrict_to_sales_channels	["web"]	6
-129	payment_giftcard__hidden	False	6
-130	payment_giftcard__hidden_url	http://pretix.dpl-cms-develop.local.itkdev.dk/dpl-cms/dpl-cms-template-single-payment/unlock/fc5ce21796de3023d774458e49b20da8bae27ebdb989716080dcdbf511af7fab/	6
-131	payment_giftcard__prevent_reminder_mail	False	6
-132	payment_explanation	{"en": "", "de": "", "de-informal": "", "ar": "", "ca": "", "zh-hans": "", "zh-hant": "", "cs": "", "da": "", "nl": "", "nl-informal": "", "fr": "", "el": "", "id": "", "it": "", "lv": "", "nb-no": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "es": "", "tr": "", "uk": ""}	6
+14	ticket_download	True	1
+4	ticketoutput_pdf__enabled	True	1
+15	show_quota_left	False	1
+16	waiting_list_enabled	True	1
+17	attendee_names_required	False	1
+18	contact_mail		1
+19	imprint_url		1
+20	payment_free__fee_reverse_calc	True	1
+21	payment_boxoffice__fee_reverse_calc	True	1
+22	payment_offsetting__fee_reverse_calc	True	1
+23	payment_manual__fee_reverse_calc	True	1
+24	payment_giftcard__fee_reverse_calc	True	1
 \.
 
 
@@ -6123,7 +6015,6 @@ COPY public.pretixbase_eventlock (event, date, token) FROM stdin;
 --
 
 COPY public.pretixbase_eventmetaproperty (id, name, "default", organizer_id, protected, required, filter_allowed, filter_public, public_label, "position", choices) FROM stdin;
-1	PSP	XG-0000000000-00000	1	f	f	t	f	{}	0	[]
 \.
 
 
@@ -6264,10 +6155,7 @@ COPY public.pretixbase_invoiceline (id, description, gross_value, tax_value, tax
 --
 
 COPY public.pretixbase_item (id, name, active, description, default_price, admission, "position", picture, available_from, available_until, category_id, event_id, free_price, hide_without_voucher, require_voucher, allow_cancel, max_per_order, min_per_order, tax_rule_id, checkin_attention, internal_name, original_price, require_approval, generate_tickets, require_bundling, show_quota_left, hidden_if_available_id, allow_waitinglist, issue_giftcard, grant_membership_duration_days, grant_membership_duration_like_event, grant_membership_duration_months, require_membership, grant_membership_type_id, require_membership_hidden, personalized, validity_dynamic_duration_days, validity_dynamic_duration_hours, validity_dynamic_duration_minutes, validity_dynamic_duration_months, validity_dynamic_start_choice, validity_dynamic_start_choice_day_limit, validity_fixed_from, validity_fixed_until, validity_mode, media_policy, media_type, free_price_suggestion, hidden_if_item_available_id, checkin_text, available_from_mode, available_until_mode, all_sales_channels) FROM stdin;
-1	{"da": "Billet"}	t	\N	0.00	t	1		\N	\N	\N	1	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
-3	{"da": "Biilet"}	t	\N	0.00	t	1		\N	\N	\N	4	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
-4	{"da": "Almindelig billet"}	t	\N	35.00	t	0		\N	\N	1	5	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
-5	{"da": "Almindelig billet"}	t	\N	35.00	t	0		\N	\N	2	6	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
+1	{"da": "Almindelig billet"}	t	\N	0.00	t	0		\N	\N	1	1	f	f	f	t	\N	\N	\N	f	\N	\N	f	\N	f	\N	\N	t	f	0	t	0	f	\N	f	t	\N	\N	\N	\N	f	\N	\N	\N	\N	\N	\N	\N	\N	\N	hide	hide	t
 \.
 
 
@@ -6308,8 +6196,7 @@ COPY public.pretixbase_itembundle (id, count, designated_price, base_item_id, bu
 --
 
 COPY public.pretixbase_itemcategory (id, name, "position", event_id, description, is_addon, internal_name) FROM stdin;
-1	{"ar": "\\u062a\\u0630\\u0627\\u0643\\u0631", "ca": "Tiquets", "cs": "Vstupenky", "da": "Billetter", "de": "Tickets", "de-informal": "Tickets", "el": "\\u0395\\u03b9\\u03c3\\u03b9\\u03c4\\u03ae\\u03c1\\u03b9\\u03b1", "en": "Tickets", "es": "Entradas", "fr": "Billets", "id": "Tiket", "it": "Biglietti", "lv": "Bi\\u013cetes", "nb-no": "Billetter", "nl": "Tickets", "nl-informal": "Kaartjes", "pl": "Bilety", "pt-pt": "Bilhetes", "ro": "Bilete", "ru": "Tickets", "sk": "Vstupenky", "sv": "Biljetter", "tr": "Biletler", "uk": "\\u041a\\u0432\\u0438\\u0442\\u043a\\u0438", "zh-hans": "\\u7968", "zh-hant": "\\u9580\\u7968"}	0	5		f	\N
-2	{"ar": "\\u062a\\u0630\\u0627\\u0643\\u0631", "ca": "Tiquets", "cs": "Vstupenky", "da": "Billetter", "de": "Tickets", "de-informal": "Tickets", "el": "\\u0395\\u03b9\\u03c3\\u03b9\\u03c4\\u03ae\\u03c1\\u03b9\\u03b1", "en": "Tickets", "es": "Entradas", "fr": "Billets", "id": "Tiket", "it": "Biglietti", "lv": "Bi\\u013cetes", "nb-no": "Billetter", "nl": "Tickets", "nl-informal": "Kaartjes", "pl": "Bilety", "pt-pt": "Bilhetes", "ro": "Bilete", "ru": "Tickets", "sk": "Vstupenky", "sv": "Biljetter", "tr": "Biletler", "uk": "\\u041a\\u0432\\u0438\\u0442\\u043a\\u0438", "zh-hans": "\\u7968", "zh-hant": "\\u9580\\u7968"}	0	6		f	\N
+1	{"ar": "\\u062a\\u0630\\u0627\\u0643\\u0631", "ca": "Tiquets", "cs": "Vstupenky", "da": "Billetter", "de": "Tickets", "de-informal": "Tickets", "el": "\\u0395\\u03b9\\u03c3\\u03b9\\u03c4\\u03ae\\u03c1\\u03b9\\u03b1", "en": "Tickets", "es": "Entradas", "fr": "Billets", "id": "Tiket", "it": "Biglietti", "lv": "Bi\\u013cetes", "nb-no": "Billetter", "nl": "Tickets", "nl-informal": "Kaartjes", "pl": "Bilety", "pt-pt": "Bilhetes", "ro": "Bilete", "ru": "Tickets", "sk": "Vstupenky", "sv": "Biljetter", "tr": "Biletler", "uk": "\\u041a\\u0432\\u0438\\u0442\\u043a\\u0438", "zh-hans": "\\u7968", "zh-hant": "\\u9580\\u7968"}	0	1		f	\N
 \.
 
 
@@ -6334,7 +6221,6 @@ COPY public.pretixbase_itemmetavalue (id, value, item_id, property_id) FROM stdi
 --
 
 COPY public.pretixbase_itemvariation (id, value, active, "position", default_price, item_id, description, original_price, require_membership, available_from, available_until, hide_without_voucher, require_membership_hidden, require_approval, checkin_attention, free_price_suggestion, checkin_text, available_from_mode, available_until_mode, all_sales_channels) FROM stdin;
-1	Standard	t	0	\N	1	\N	\N	f	\N	\N	f	f	f	f	\N	\N	hide	hide	t
 \.
 
 
@@ -6367,52 +6253,14 @@ COPY public.pretixbase_itemvariationmetavalue (id, value, property_id, variation
 --
 
 COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, content_type_id, event_id, user_id, api_token_id, visible, shredded, oauth_application_id, device_id, organizer_link_id) FROM stdin;
-1	1	2024-06-03 22:01:28.023657+00	pretix.control.auth.user.new_source	{"agent_type": "Firefox", "country": "?", "device_type": "Mac", "os_type": "Mac OS X"}	5	\N	1	\N	t	f	\N	\N	\N
-2	1	2024-06-03 22:08:22.364308+00	pretix.team.token.created	{"id": 1, "name": "dpl-cms"}	34	\N	1	\N	t	f	\N	\N	1
-3	1	2024-06-10 13:39:10.192714+00	pretix.event.added	{}	9	1	1	\N	t	f	\N	\N	1
-4	1	2024-06-10 13:39:10.196892+00	pretix.event.settings	{"currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": true, "locale": "en", "locales": ["en"], "location": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "dpl-cms-default-template", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-default-template", "tax_rate": null, "timezone": "UTC"}	9	1	1	\N	t	f	\N	\N	1
-5	1	2024-06-10 13:39:41.170761+00	pretix.event.settings	{"locale": "da", "locales": ["en", "da"], "primary_color": "#8e44b3", "region": "DK", "timezone": "Europe/Copenhagen"}	9	1	1	\N	t	f	\N	\N	1
-6	1	2024-06-10 13:39:48.486122+00	pretix.event.settings	{"locales": ["da"]}	9	1	1	\N	t	f	\N	\N	1
-7	1	2024-06-11 08:20:45.129434+00	pretix.event.item.added	{"default_price": "0", "has_variations": true, "name": {"ar": "", "cs": "", "da": "Billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	11	1	1	\N	t	f	\N	\N	1
-8	1	2024-06-11 08:23:50.546564+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00+01:00", "date_to": "2001-01-01T01:00:00+01:00", "frontpage_text": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "cs": "", "da": "dpl-cms-default-template", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	1	1	\N	t	f	\N	\N	1
-9	1	2024-06-11 08:23:50.555773+00	pretix.event.quota.added	{"id": 1, "itemvars": ["1-1"]}	20	1	1	\N	t	f	\N	\N	1
-10	1	2024-06-11 08:23:50.556486+00	pretix.subevent.quota.added	{"id": 1, "itemvars": ["1-1"]}	37	1	1	\N	t	f	\N	\N	1
-11	1	2024-08-15 07:45:05.941804+00	pretix.property.created	{"default": "XG-0000000000-00000", "name": "PSP"}	41	\N	1	\N	t	f	\N	\N	1
-12	1	2024-08-15 12:30:56.884866+00	pretix.team.invite.created	{"email": "dpl-cms@localhost"}	34	\N	1	\N	t	f	\N	\N	1
-13	2	2024-08-15 12:32:04.547084+00	pretix.control.auth.user.created	{}	5	\N	2	\N	t	f	\N	\N	\N
-14	1	2024-08-15 12:32:04.551132+00	pretix.team.member.joined	{"email": "dpl-cms@localhost", "invite_email": "dpl-cms@localhost", "user": 2}	34	\N	\N	\N	t	f	\N	\N	1
-21	1	2024-08-28 11:00:43.472079+00	pretix.event.deleted	{"event_id": 3, "logentries": [20, 19, 18, 17, 16, 15], "name": "dpl-cms-default-template-no-product-variations", "slug": "dpl-cms-default-template-no-product-variations"}	17	\N	1	\N	t	f	\N	\N	1
-15	3	2024-08-28 10:56:29.508069+00	pretix.event.added	{}	9	\N	1	\N	t	f	\N	\N	1
-16	3	2024-08-28 10:56:29.510457+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": true, "locale": "en", "locales": ["en", "da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "dpl-cms-default-template-no-product-variations", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-default-template-no-product-variations", "tax_rate": null, "timezone": "UTC"}	9	\N	1	\N	t	f	\N	\N	1
-17	2	2024-08-28 10:56:55.183489+00	pretix.event.item.added	{"default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Billet", "de": "", "de-informal": "", "el": "", "en": "Ticket", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	11	\N	1	\N	t	f	\N	\N	1
-18	2	2024-08-28 10:58:12.44513+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00Z", "date_to": null, "frontpage_text": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "dpl-cms-default-template-no-product-variations", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	\N	1	\N	t	f	\N	\N	1
-19	2	2024-08-28 10:58:12.456007+00	pretix.event.quota.added	{"id": 2, "itemvars": ["2"]}	20	\N	1	\N	t	f	\N	\N	1
-20	2	2024-08-28 10:58:12.457042+00	pretix.subevent.quota.added	{"id": 2, "itemvars": ["2"]}	37	\N	1	\N	t	f	\N	\N	1
-22	4	2024-08-28 11:01:06.960754+00	pretix.event.added	{}	9	4	1	\N	t	f	\N	\N	1
-23	4	2024-08-28 11:01:06.963762+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": true, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-default-template-no-product-variations", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-default-template-no-product-variations", "tax_rate": null, "timezone": "UTC"}	9	4	1	\N	t	f	\N	\N	1
-24	3	2024-08-28 11:01:26.804467+00	pretix.event.item.added	{"default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Biilet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	11	4	1	\N	t	f	\N	\N	1
-25	3	2024-08-28 11:02:24.916645+00	pretix.subevent.added	{"active": true, "comment": "", "date_admission": null, "date_from": "2001-01-01T00:00:00Z", "date_to": null, "frontpage_text": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "geo_lat": null, "geo_lon": null, "is_public": true, "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-default-template-no-product-variations", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "presale_end": null, "presale_start": null}	37	4	1	\N	t	f	\N	\N	1
-26	3	2024-08-28 11:02:24.926732+00	pretix.event.quota.added	{"id": 3, "itemvars": ["3"]}	20	4	1	\N	t	f	\N	\N	1
-27	3	2024-08-28 11:02:24.927509+00	pretix.subevent.quota.added	{"id": 3, "itemvars": ["3"]}	37	4	1	\N	t	f	\N	\N	1
-28	4	2024-08-28 11:02:41.939585+00	pretix.event.quota.added	{"close_when_sold_out": false, "ignore_for_event_availability": false, "itemvars": ["3"], "name": "Billetter", "release_after_exit": false, "size": null, "subevent": {"id": 3, "type": "SubEvent"}}	20	4	1	\N	t	f	\N	\N	1
-29	3	2024-08-28 11:03:00.634376+00	pretix.event.quota.deleted	{}	20	4	1	\N	t	f	\N	\N	1
-30	5	2024-09-02 12:29:37.795382+00	pretix.event.added	{}	9	5	1	\N	t	f	\N	\N	1
-31	5	2024-09-02 12:29:37.801002+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00Z", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": false, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-template-single", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-template-single", "tax_rate": null, "timezone": "UTC"}	9	5	1	\N	t	f	\N	\N	1
-32	5	2024-09-02 12:29:51.197132+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.ticketoutputpdf"}	9	5	1	\N	t	f	\N	\N	1
-33	5	2024-09-02 12:29:51.209335+00	pretix.event.settings	{}	9	5	1	\N	t	f	\N	\N	1
-34	1	2024-09-02 12:29:51.430853+00	pretix.event.category.added	{"name": "Tickets"}	12	5	1	\N	t	f	\N	\N	1
-35	4	2024-09-02 12:29:51.438333+00	pretix.event.item.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	11	5	1	\N	t	f	\N	\N	1
-36	5	2024-09-02 12:29:51.442871+00	pretix.event.quota.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	20	5	1	\N	t	f	\N	\N	1
-37	6	2024-09-03 10:21:12.260131+00	pretix.event.added	{}	9	6	1	\N	t	f	\N	\N	1
-38	6	2024-09-03 10:21:12.263021+00	pretix.event.settings	{"copy_from_event": null, "currency": "DKK", "date_from": "2001-01-01T00:00:00+01:00", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": false, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-template-single-payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-template-single-payment", "tax_rate": null, "timezone": "Europe/Copenhagen"}	9	6	1	\N	t	f	\N	\N	1
-39	6	2024-09-03 10:21:24.948259+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.ticketoutputpdf"}	9	6	1	\N	t	f	\N	\N	1
-40	6	2024-09-03 10:21:24.957165+00	pretix.event.settings	{}	9	6	1	\N	t	f	\N	\N	1
-41	2	2024-09-03 10:21:25.613788+00	pretix.event.category.added	{"name": "Tickets"}	12	6	1	\N	t	f	\N	\N	1
-42	5	2024-09-03 10:21:25.619989+00	pretix.event.item.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 0}	11	6	1	\N	t	f	\N	\N	1
-43	6	2024-09-03 10:21:25.623324+00	pretix.event.quota.added	{"DELETE": false, "default_price": "35.00", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 0}	20	6	1	\N	t	f	\N	\N	1
-44	6	2024-09-03 10:22:21.939043+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.manualpayment"}	9	6	1	\N	t	f	\N	\N	1
-45	6	2024-09-03 10:23:15.122494+00	pretix.event.payment.provider.manual	{"payment_manual__enabled": true, "payment_manual_checkout_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_email_instructions": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_pending_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_public_name": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	9	6	1	\N	t	f	\N	\N	1
-46	6	2024-09-03 10:23:24.079581+00	pretix.event.payment.provider.giftcard	{"payment_giftcard__enabled": false}	9	6	1	\N	t	f	\N	\N	1
+1	1	2024-09-04 10:56:58.855075+00	pretix.control.auth.user.new_source	{"agent_type": "Firefox", "country": "?", "device_type": "Mac", "os_type": "Mac OS X"}	5	\N	1	\N	t	f	\N	\N	\N
+2	1	2024-09-04 10:58:35.783465+00	pretix.event.added	{}	9	1	1	\N	t	f	\N	\N	1
+3	1	2024-09-04 10:58:35.78804+00	pretix.event.settings	{"currency": "DKK", "date_from": "2001-01-01T00:00:00+01:00", "date_to": null, "geo_lat": null, "geo_lon": null, "has_subevents": false, "locale": "da", "locales": ["da"], "location": {"ar": "", "ca": "", "cs": "", "da": "", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "name": {"ar": "", "ca": "", "cs": "", "da": "dpl-cms-singular-no-payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "organizer": {"id": 1, "type": "Organizer"}, "presale_end": null, "presale_start": null, "slug": "dpl-cms-singular-no-payment", "tax_rate": null, "timezone": "Europe/Copenhagen"}	9	1	1	\N	t	f	\N	\N	1
+4	1	2024-09-04 10:59:01.30568+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.ticketoutputpdf"}	9	1	1	\N	t	f	\N	\N	1
+5	1	2024-09-04 10:59:01.317923+00	pretix.event.settings	{}	9	1	1	\N	t	f	\N	\N	1
+6	1	2024-09-04 10:59:01.7767+00	pretix.event.category.added	{"name": "Tickets"}	12	1	1	\N	t	f	\N	\N	1
+7	1	2024-09-04 10:59:01.785552+00	pretix.event.item.added	{"DELETE": false, "default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	11	1	1	\N	t	f	\N	\N	1
+8	1	2024-09-04 10:59:01.789696+00	pretix.event.quota.added	{"DELETE": false, "default_price": "0", "name": {"ar": "", "ca": "", "cs": "", "da": "Almindelig billet", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "quota": 100}	20	1	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -6446,7 +6294,6 @@ COPY public.pretixbase_membershiptype (id, name, transferable, allow_parallel_us
 
 COPY public.pretixbase_notificationsetting (id, action_type, method, event_id, user_id, enabled) FROM stdin;
 1	pretix.event.order.refund.requested	mail	\N	1	t
-2	pretix.event.order.refund.requested	mail	\N	2	t
 \.
 
 
@@ -6454,7 +6301,7 @@ COPY public.pretixbase_notificationsetting (id, action_type, method, event_id, u
 -- Data for Name: pretixbase_order; Type: TABLE DATA; Schema: public; Owner: pretix
 --
 
-COPY public.pretixbase_order (id, code, status, email, locale, secret, datetime, expires, total, event_id, comment, expiry_reminder_sent, meta_info, download_reminder_sent, checkin_attention, last_modified, require_approval, testmode, email_known_to_work, cancellation_date, phone, customer_id, custom_followup_at, valid_if_pending, invoice_dirty, checkin_text, organizer_id, internal_secret, sales_channel_id) FROM stdin;
+COPY public.pretixbase_order (id, code, status, email, locale, secret, datetime, expires, total, event_id, comment, expiry_reminder_sent, meta_info, download_reminder_sent, checkin_attention, last_modified, require_approval, testmode, email_known_to_work, cancellation_date, phone, customer_id, custom_followup_at, valid_if_pending, invoice_dirty, checkin_text, organizer_id, internal_secret, sales_channel_id, api_meta) FROM stdin;
 \.
 
 
@@ -6495,7 +6342,7 @@ COPY public.pretixbase_orderrefund (id, local_id, state, source, amount, created
 --
 
 COPY public.pretixbase_organizer (id, name, slug) FROM stdin;
-1	DPL CMS	dpl-cms
+1	dpl-cms	dpl-cms
 \.
 
 
@@ -6561,10 +6408,7 @@ COPY public.pretixbase_questionoption (id, answer, question_id, "position", iden
 --
 
 COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_sold_out, closed, release_after_exit, ignore_for_event_availability) FROM stdin;
-1	Tickets	\N	1	1	f	f	f	f
-4	Billetter	\N	4	3	f	f	f	f
-5	Almindelig billet	100	5	\N	f	f	f	f
-6	Almindelig billet	0	6	\N	f	f	f	f
+1	Almindelig billet	100	1	\N	f	f	f	f
 \.
 
 
@@ -6574,9 +6418,6 @@ COPY public.pretixbase_quota (id, name, size, event_id, subevent_id, close_when_
 
 COPY public.pretixbase_quota_items (id, quota_id, item_id) FROM stdin;
 1	1	1
-4	4	3
-5	5	4
-6	6	5
 \.
 
 
@@ -6585,7 +6426,6 @@ COPY public.pretixbase_quota_items (id, quota_id, item_id) FROM stdin;
 --
 
 COPY public.pretixbase_quota_variations (id, quota_id, itemvariation_id) FROM stdin;
-1	1	1
 \.
 
 
@@ -6659,7 +6499,7 @@ COPY public.pretixbase_seatingplan (id, name, layout, organizer_id) FROM stdin;
 --
 
 COPY public.pretixbase_staffsession (id, date_start, date_end, session_key, comment, user_id) FROM stdin;
-1	2024-06-03 22:06:34.326692+00	2024-06-04 14:34:08.632495+00	41myepix0mj05lqzzg9uvwzjgmz7tp1p		1
+1	2024-09-04 10:57:25.465602+00	\N	u35s6mqevs59l0sak639q68bnvurnxdz		1
 \.
 
 
@@ -6668,25 +6508,19 @@ COPY public.pretixbase_staffsession (id, date_start, date_end, session_key, comm
 --
 
 COPY public.pretixbase_staffsessionauditlog (id, datetime, url, session_id, impersonating_id, method) FROM stdin;
-1	2024-06-03 22:06:35.078916+00	/control/organizers/	1	\N	GET
-2	2024-06-03 22:06:39.548451+00	/control/organizers/add	1	\N	GET
-3	2024-06-03 22:06:54.177985+00	/control/organizers/add	1	\N	POST
-4	2024-06-03 22:06:55.132257+00	/control/organizer/dpl-cms/	1	\N	GET
-5	2024-06-03 22:07:05.164936+00	/control/nav/typeahead/	1	\N	GET
-6	2024-06-03 22:07:08.283013+00	/control/organizer/dpl-cms/	1	\N	GET
-7	2024-06-03 22:07:08.365014+00	/control/organizer/dpl-cms/	1	\N	GET
-8	2024-06-03 22:07:11.183929+00	/control/organizer/dpl-cms/edit	1	\N	GET
-9	2024-06-03 22:07:12.82115+00	/control/pdf/editor/webfonts.css	1	\N	GET
-10	2024-06-03 22:07:33.181888+00	/control/organizer/dpl-cms/teams	1	\N	GET
-11	2024-06-03 22:07:37.473663+00	/control/organizer/dpl-cms/team/1/edit	1	\N	GET
-12	2024-06-03 22:07:53.652164+00	/control/nav/typeahead/	1	\N	GET
-13	2024-06-03 22:07:55.390179+00	/control/organizer/dpl-cms/	1	\N	GET
-14	2024-06-03 22:07:56.380647+00	/control/organizer/dpl-cms/	1	\N	GET
-15	2024-06-03 22:08:00.604176+00	/control/organizer/dpl-cms/teams	1	\N	GET
-16	2024-06-03 22:08:05.933841+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
-17	2024-06-03 22:08:09.369292+00	/control/organizer/dpl-cms/team/1/	1	\N	POST
-18	2024-06-03 22:08:22.354658+00	/control/organizer/dpl-cms/team/1/	1	\N	POST
-19	2024-06-03 22:08:22.383575+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
+1	2024-09-04 10:57:25.483998+00	/control/organizers/	1	\N	GET
+2	2024-09-04 10:57:27.734413+00	/control/organizers/add	1	\N	GET
+3	2024-09-04 10:57:35.708314+00	/control/organizers/add	1	\N	POST
+4	2024-09-04 10:57:35.760026+00	/control/organizer/dpl-cms/	1	\N	GET
+5	2024-09-04 10:58:00.981194+00	/control/events/add	1	\N	GET
+6	2024-09-04 10:58:04.425133+00	/control/organizers/select2	1	\N	GET
+7	2024-09-04 10:58:09.221186+00	/control/events/add	1	\N	POST
+8	2024-09-04 10:58:35.595562+00	/control/events/add	1	\N	POST
+9	2024-09-04 10:58:35.861691+00	/control/event/dpl-cms/dpl-cms-singular-no-payment/quickstart/	1	\N	GET
+10	2024-09-04 10:59:01.277443+00	/control/event/dpl-cms/dpl-cms-singular-no-payment/quickstart/	1	\N	POST
+11	2024-09-04 10:59:01.885842+00	/control/event/dpl-cms/dpl-cms-singular-no-payment/	1	\N	GET
+12	2024-09-04 10:59:02.439572+00	/control/event/dpl-cms/dpl-cms-singular-no-payment/widgets.json	1	\N	GET
+13	2024-09-04 10:59:02.461072+00	/control/event/dpl-cms/dpl-cms-singular-no-payment/logs/embed	1	\N	GET
 \.
 
 
@@ -6695,8 +6529,6 @@ COPY public.pretixbase_staffsessionauditlog (id, datetime, url, session_id, impe
 --
 
 COPY public.pretixbase_subevent (id, active, name, date_from, date_to, date_admission, presale_end, presale_start, location, event_id, frontpage_text, is_public, seating_plan_id, geo_lat, geo_lon, last_modified, comment) FROM stdin;
-1	t	{"da": "dpl-cms-default-template"}	2000-12-31 23:00:00+00	2001-01-01 00:00:00+00	\N	\N	\N	{}	1	{}	t	\N	\N	\N	2024-06-11 08:26:50.804554+00	
-3	t	{"da": "dpl-cms-default-template-no-product-variations"}	2001-01-01 00:00:00+00	\N	\N	\N	\N	{}	4	{}	t	\N	\N	\N	2024-08-28 11:02:24.911956+00	
 \.
 
 
@@ -6705,7 +6537,6 @@ COPY public.pretixbase_subevent (id, active, name, date_from, date_to, date_admi
 --
 
 COPY public.pretixbase_subeventitem (id, price, item_id, subevent_id, disabled, available_from, available_until) FROM stdin;
-2	\N	3	3	f	\N	\N
 \.
 
 
@@ -6714,7 +6545,6 @@ COPY public.pretixbase_subeventitem (id, price, item_id, subevent_id, disabled, 
 --
 
 COPY public.pretixbase_subeventitemvariation (id, price, subevent_id, variation_id, disabled, available_from, available_until) FROM stdin;
-1	\N	1	1	f	\N	\N
 \.
 
 
@@ -6757,7 +6587,6 @@ COPY public.pretixbase_team_limit_events (id, team_id, event_id) FROM stdin;
 
 COPY public.pretixbase_team_members (id, team_id, user_id) FROM stdin;
 1	1	1
-2	1	2
 \.
 
 
@@ -6766,7 +6595,6 @@ COPY public.pretixbase_team_members (id, team_id, user_id) FROM stdin;
 --
 
 COPY public.pretixbase_teamapitoken (id, name, active, token, team_id) FROM stdin;
-1	dpl-cms	t	p1q35ojjgt7jh3wqoub00v5l0v91xf94pjn0l708zmcz40ec1i7a6eilrjhrle1i	1
 \.
 
 
@@ -6799,8 +6627,7 @@ COPY public.pretixbase_u2fdevice (id, name, confirmed, json_data, user_id) FROM 
 --
 
 COPY public.pretixbase_user (id, password, last_login, email, is_active, is_staff, date_joined, locale, timezone, require_2fa, fullname, notifications_send, notifications_token, auth_backend, session_token, needs_password_change, auth_backend_identifier) FROM stdin;
-1	argon2$argon2id$v=19$m=102400,t=2,p=8$R0dFZ1JEQmJPOFZ4dHdmNFRaY3M0aw$mcPPnvZrdw+AOOHUAZnV0J+siYIoYVIiAvivF7HGmSM	2024-06-11 08:00:49.165989+00	admin@localhost	t	t	2024-06-03 21:58:20.960446+00	en	UTC	f	\N	t	kRVsabIwz15RtFC8oTaIL68tgbdEFmyG	native	7jinsT4y1Pu19fzqXvvlnSwQyfgJpyGN	f	\N
-2	argon2$argon2id$v=19$m=102400,t=2,p=8$WHJjd1c0WDBoQWluSHpqRzdYUHZqWg$HEnAgiyA1K4PuayNvYNVsNQ1ir7FId2aVyT8IYDLvj0	2024-08-15 12:32:04.548641+00	dpl-cms@localhost	t	f	2024-08-15 12:32:04.502223+00	en	UTC	f	\N	t	NGAE1pkaJsLHwtHyX9R0gsmOLYOC0Fgr	native	2UESalJup24TUV3oBhEHckbk7nl3VRqO	f	\N
+1	argon2$argon2id$v=19$m=102400,t=2,p=8$OWdzalN2SUhZZHRzMEJ6V1JZQ2RoVw$LkDrpjeBypk+OO5KkYTqyHQfVRNjc7xSXBTsvM4cZGk	2024-09-04 10:56:58.86177+00	admin@localhost	t	t	2024-09-04 10:55:16.869039+00	en	UTC	f	\N	t	j2PeNJGniV2G0xq3XIXPHZGo7IoF8oN2	native	jKqZuC4RrJ5LsPhHDdWOcBH6xfENvOhO	f	\N
 \.
 
 
@@ -6825,7 +6652,7 @@ COPY public.pretixbase_user_user_permissions (id, user_id, permission_id) FROM s
 --
 
 COPY public.pretixbase_userknownloginsource (id, agent_type, device_type, os_type, country, last_seen, user_id) FROM stdin;
-1	Firefox	Mac	Mac OS X	\N	2024-06-11 08:00:49.156283+00	1
+1	Firefox	Mac	Mac OS X	\N	2024-09-04 10:56:58.842725+00	1
 \.
 
 
@@ -6914,8 +6741,7 @@ COPY public.stripe_registeredapplepaydomain (id, domain, account) FROM stdin;
 --
 
 COPY public.ticketoutputpdf_ticketlayout (id, "default", name, layout, background, event_id) FROM stdin;
-1	t	Default layout	[{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"274.60",\n    "fontsize":"16.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"175.00",\n    "content":"event_name",\n    "text":"Sample event name",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"262.90",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"itemvar",\n    "text":"Sample product – sample variation",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"252.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"attendee_name",\n    "text":"John Doe",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"242.10",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_begin",\n    "text":"2016-05-31 20:00",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"231.70",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"seat",\n    "text":"Ground floor, Row 3, Seat 4",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"204.80",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_location",\n    "text":"Random City",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"30.00",\n    "content":"order",\n    "text":"A1B2C",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"52.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"45.00",\n    "content":"price",\n    "text":"123.45 EUR",\n    "align":"right"\n},\n{\n    "type":"textarea",\n    "left":"102.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"90.00",\n    "content":"secret",\n    "text":"tdmruoekvkpbv1o2mv8xccvqcikvr58u",\n    "align":"left"\n},\n{\n    "type":"barcodearea",\n    "left":"130.40",\n    "bottom":"204.50",\n    "size":"64.00",\n    "content":"secret"\n},\n{\n    "type":"poweredby",\n    "left":"88.72",\n    "bottom":"10.00",\n    "size":"20.00",\n    "content":"dark"\n}]		5
-2	t	Default layout	[{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"274.60",\n    "fontsize":"16.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"175.00",\n    "content":"event_name",\n    "text":"Sample event name",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"262.90",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"itemvar",\n    "text":"Sample product – sample variation",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"252.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"attendee_name",\n    "text":"John Doe",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"242.10",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_begin",\n    "text":"2016-05-31 20:00",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"231.70",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"seat",\n    "text":"Ground floor, Row 3, Seat 4",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"204.80",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_location",\n    "text":"Random City",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"30.00",\n    "content":"order",\n    "text":"A1B2C",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"52.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"45.00",\n    "content":"price",\n    "text":"123.45 EUR",\n    "align":"right"\n},\n{\n    "type":"textarea",\n    "left":"102.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"90.00",\n    "content":"secret",\n    "text":"tdmruoekvkpbv1o2mv8xccvqcikvr58u",\n    "align":"left"\n},\n{\n    "type":"barcodearea",\n    "left":"130.40",\n    "bottom":"204.50",\n    "size":"64.00",\n    "content":"secret"\n},\n{\n    "type":"poweredby",\n    "left":"88.72",\n    "bottom":"10.00",\n    "size":"20.00",\n    "content":"dark"\n}]		6
+1	t	Default layout	[{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"274.60",\n    "fontsize":"16.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"175.00",\n    "content":"event_name",\n    "text":"Sample event name",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"262.90",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"itemvar",\n    "text":"Sample product – sample variation",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"252.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"attendee_name",\n    "text":"John Doe",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"242.10",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_begin",\n    "text":"2016-05-31 20:00",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"231.70",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"seat",\n    "text":"Ground floor, Row 3, Seat 4",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"204.80",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"110.00",\n    "content":"event_location",\n    "text":"Random City",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"17.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"30.00",\n    "content":"order",\n    "text":"A1B2C",\n    "align":"left"\n},\n{\n    "type":"textarea",\n    "left":"52.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"45.00",\n    "content":"price",\n    "text":"123.45 EUR",\n    "align":"right"\n},\n{\n    "type":"textarea",\n    "left":"102.50",\n    "bottom":"194.50",\n    "fontsize":"13.0",\n    "color":[\n        0,\n        0,\n        0,\n        1\n    ],\n    "fontfamily":"Open Sans",\n    "bold":false,\n    "italic":false,\n    "width":"90.00",\n    "content":"secret",\n    "text":"tdmruoekvkpbv1o2mv8xccvqcikvr58u",\n    "align":"left"\n},\n{\n    "type":"barcodearea",\n    "left":"130.40",\n    "bottom":"204.50",\n    "size":"64.00",\n    "content":"secret"\n},\n{\n    "type":"poweredby",\n    "left":"88.72",\n    "bottom":"10.00",\n    "size":"20.00",\n    "content":"dark"\n}]		1
 \.
 
 
@@ -6994,7 +6820,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 112, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 402, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 403, true);
 
 
 --
@@ -7183,7 +7009,7 @@ SELECT pg_catalog.setval('public.pretixbase_checkinlist_gates_id_seq', 1, false)
 -- Name: pretixbase_checkinlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_checkinlist_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_checkinlist_id_seq', 1, true);
 
 
 --
@@ -7274,7 +7100,7 @@ SELECT pg_catalog.setval('public.pretixbase_discount_limit_sales_channels_id_seq
 -- Name: pretixbase_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 6, true);
+SELECT pg_catalog.setval('public.pretixbase_event_id_seq', 1, true);
 
 
 --
@@ -7295,7 +7121,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventfooterlink_id_seq', 1, false);
 -- Name: pretixbase_eventmetaproperty_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, false);
 
 
 --
@@ -7309,7 +7135,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventmetavalue_id_seq', 1, false);
 -- Name: pretixbase_eventsetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 132, true);
+SELECT pg_catalog.setval('public.pretixbase_eventsetting_id_seq', 24, true);
 
 
 --
@@ -7379,7 +7205,7 @@ SELECT pg_catalog.setval('public.pretixbase_invoiceline_id_seq', 1, false);
 -- Name: pretixbase_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 5, true);
+SELECT pg_catalog.setval('public.pretixbase_item_id_seq', 1, true);
 
 
 --
@@ -7414,7 +7240,7 @@ SELECT pg_catalog.setval('public.pretixbase_itembundle_id_seq', 1, false);
 -- Name: pretixbase_itemcategory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_itemcategory_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_itemcategory_id_seq', 1, true);
 
 
 --
@@ -7435,7 +7261,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemmetavalue_id_seq', 1, false);
 -- Name: pretixbase_itemvariation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_itemvariation_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_itemvariation_id_seq', 1, false);
 
 
 --
@@ -7463,7 +7289,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 46, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 8, true);
 
 
 --
@@ -7491,7 +7317,7 @@ SELECT pg_catalog.setval('public.pretixbase_membershiptype_id_seq', 1, false);
 -- Name: pretixbase_notificationsetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_notificationsetting_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_notificationsetting_id_seq', 1, true);
 
 
 --
@@ -7533,7 +7359,7 @@ SELECT pg_catalog.setval('public.pretixbase_orderrefund_id_seq', 1, false);
 -- Name: pretixbase_organizer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_organizer_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_organizer_id_seq', 1, true);
 
 
 --
@@ -7547,7 +7373,7 @@ SELECT pg_catalog.setval('public.pretixbase_organizerfooterlink_id_seq', 1, fals
 -- Name: pretixbase_organizersetting_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_organizersetting_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_organizersetting_id_seq', 1, true);
 
 
 --
@@ -7589,21 +7415,21 @@ SELECT pg_catalog.setval('public.pretixbase_questionoption_id_seq', 1, false);
 -- Name: pretixbase_quota_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 6, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_id_seq', 1, true);
 
 
 --
 -- Name: pretixbase_quota_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 6, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_items_id_seq', 1, true);
 
 
 --
 -- Name: pretixbase_quota_variations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_quota_variations_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_quota_variations_id_seq', 1, false);
 
 
 --
@@ -7624,7 +7450,7 @@ SELECT pg_catalog.setval('public.pretixbase_revokedticketsecret_id_seq', 1, fals
 -- Name: pretixbase_saleschannel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_saleschannel_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_saleschannel_id_seq', 1, true);
 
 
 --
@@ -7673,28 +7499,28 @@ SELECT pg_catalog.setval('public.pretixbase_staffsession_id_seq', 1, true);
 -- Name: pretixbase_staffsessionauditlog_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 19, true);
+SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 13, true);
 
 
 --
 -- Name: pretixbase_subevent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_subevent_id_seq', 3, true);
+SELECT pg_catalog.setval('public.pretixbase_subevent_id_seq', 1, false);
 
 
 --
 -- Name: pretixbase_subeventitem_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_subeventitem_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_subeventitem_id_seq', 1, false);
 
 
 --
 -- Name: pretixbase_subeventitemvariation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_subeventitemvariation_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_subeventitemvariation_id_seq', 1, false);
 
 
 --
@@ -7729,21 +7555,21 @@ SELECT pg_catalog.setval('public.pretixbase_team_limit_events_id_seq', 1, false)
 -- Name: pretixbase_team_members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_team_members_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_team_members_id_seq', 1, true);
 
 
 --
 -- Name: pretixbase_teamapitoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_teamapitoken_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_teamapitoken_id_seq', 1, false);
 
 
 --
 -- Name: pretixbase_teaminvite_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_teaminvite_id_seq', 1, true);
+SELECT pg_catalog.setval('public.pretixbase_teaminvite_id_seq', 1, false);
 
 
 --
@@ -7771,7 +7597,7 @@ SELECT pg_catalog.setval('public.pretixbase_user_groups_id_seq', 1, false);
 -- Name: pretixbase_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_user_id_seq', 2, true);
+SELECT pg_catalog.setval('public.pretixbase_user_id_seq', 1, true);
 
 
 --
@@ -7862,7 +7688,7 @@ SELECT pg_catalog.setval('public.stripe_registeredapplepaydomain_id_seq', 1, fal
 -- Name: ticketoutputpdf_ticketlayout_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.ticketoutputpdf_ticketlayout_id_seq', 2, true);
+SELECT pg_catalog.setval('public.ticketoutputpdf_ticketlayout_id_seq', 1, true);
 
 
 --
@@ -14351,13 +14177,6 @@ ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
 
 ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
     ADD CONSTRAINT ticketoutputpdf_ticketlayoutitem_layout_id_9b76e49f_fk FOREIGN KEY (layout_id) REFERENCES public.ticketoutputpdf_ticketlayout(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pretix
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
 --
