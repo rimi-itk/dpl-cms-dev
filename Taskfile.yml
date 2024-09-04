@@ -44,9 +44,8 @@ tasks:
   dev:install:
     prompt: "This will reset your setup. Continue?"
     cmds:
-      - hest
-      # - task dev:compose -- down
-      - task dev:up
+      - task dev:compose -- down
+      - task dev:compose:up
 
       # - rm -fr {{ .DPL_CMS_DIRECTORY }}
       - git clone --branch {{ .DPL_CMS_REPOSITORY_BRANCH }} {{ .DPL_CMS_REPOSITORY_URL }} {{ .DPL_CMS_DIRECTORY }}
@@ -69,13 +68,13 @@ tasks:
   dev:dpl-cms:open:
       - open $(task dev:drush -- user:login /admin/config/dpl_pretix)
 
-  dev:up:
+  dev:compose:up:
     cmds:
       - task dev:compose -- up --detach --build
 
   dev:update:
     cmds:
-      - task: dev:up
+      - task dev:compose:up
       - task dpl-cms:git -- pull
       - task dpl-cms:git -- log -10 --oneline
       - task dev:composer:install
@@ -129,13 +128,17 @@ tasks:
   dev:pretix:db-load:
     prompt: "This will reset your pretix database. Continue?"
     cmds:
-      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix <<< "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
-      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix < .docker/pretix/dumps/pretix.sql
+      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --quiet --user=pretix pretix <<< "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+      - task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --quiet --user=pretix pretix < .docker/pretix/dumps/pretix.sql
+      # https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#updates
+      - task dev:compose -- exec pretix pretix upgrade
+
+  # txm2o3xp8e8rfutomzhkptcgc7j02hz9v2h3cv5ndt342ojtr5bekkwi8sudxew6
 
   dev:pretix:ping-api:
     vars:
       API_TOKEN:
-        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
+        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< "SELECT token FROM pretixbase_teamapitoken WHERE name = 'dpl-cms'"
     cmds:
       - "task dev:compose -- exec phpfpm curl --header 'Authorization: Token {{ .API_TOKEN }}' {{ .PRETIX_URL }}/api/v1/organizers/"
       # - "API_TOKEN=$(task dev:pretix:api-token) echo task dev:compose -- exec --env API_TOKEN phpfpm curl --header \"Authorization: Token $API_TOKEN\" {{ .PRETIX_URL }}/api/v1/organizers/"
@@ -145,11 +148,11 @@ tasks:
       # Copy our PHPStan config and use it.
       - (cp phpstan.neon.dist dpl-cms/tmp.phpstan.neon.dist && {{ .DOCKER_COMPOSE }} exec phpfpm vendor/bin/phpstan --configuration=tmp.phpstan.neon.dist --verbose)
 
-  dev:drupal:reset-pretix-config:
+  dev:dpl-cms:reset-pretix-config:
     prompt: "Reset pretix config in DPL CMS"
     vars:
       PRETIX_API_TOKEN:
-        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< 'SELECT token FROM pretixbase_teamapitoken'
+        sh: task dev:compose -- exec --no-TTY --env PGPASSWORD=pretix pretix_database psql --user=pretix pretix --tuples-only --csv <<< "SELECT token FROM pretixbase_teamapitoken WHERE name = 'dpl-cms'"
     cmds:
       # Clean up
       - task dev:drush -- --yes config:get dpl_pretix.settings || true
@@ -163,8 +166,11 @@ tasks:
           organizer: {{ .PRETIX_ORGANIZER }}
           api_token: {{ .PRETIX_API_TOKEN }}
           template_events: |
-            dpl-cms-default-template: dpl-cms-default-template
-          event_slug_template: "prod-{id}"
+            dpl-cms-series-no-payment: dpl-cms-series-no-payment
+            dpl-cms-series-payment: dpl-cms-series-payment
+            dpl-cms-singular-no-payment: dpl-cms-singular-no-payment
+            dpl-cms-singular-payment: dpl-cms-singular-payment
+          event_slug_template: "prod-{id}-{random}"
 
         test:
           domain: {{ .DPL_CMS_DOMAIN }}
@@ -172,9 +178,11 @@ tasks:
           organizer: {{ .PRETIX_ORGANIZER }}
           api_token: {{ .PRETIX_API_TOKEN }}
           template_events: |
-            dpl-cms-default-template: dpl-cms-default-template
-            dpl-cms-default-template-no-product-variations: dpl-cms-default-template-no-product-variations
-          event_slug_template: 'test-{id}'
+            dpl-cms-series-no-payment: dpl-cms-series-no-payment
+            dpl-cms-series-payment: dpl-cms-series-payment
+            dpl-cms-singular-no-payment: dpl-cms-singular-no-payment
+            dpl-cms-singular-payment: dpl-cms-singular-payment
+          event_slug_template: 'test-{id}-{random}'
 
         EOF
 

@@ -1,11 +1,26 @@
 # dpl-cms-dev
 
-## DPL CMS
+[dpl-cms](https://github.com/danskernesdigitalebibliotek/dpl-cms) development setup for [ITK
+Development](https://github.com/itk-dev) (and others using [ITK-dev docker
+setup](https://github.com/itk-dev/devops_itkdev-docker)).
+
+## Getting started
+
+We use [Task](https://taskfile.dev/), so run
 
 ``` shell
 task dev:install
 task dev:update
 ```
+
+to get started.
+
+This will install dpl-cms and make it available on <https://dpl-cms-develop.local.itkdev.dk/>. The development setup
+also contains the latest stable version of [pretix](https://pretix.eu/) and pretix is available on
+<http://pretix.dpl-cms-develop.local.itkdev.dk/> with the default admin credentials; see [Small-scale deployment with
+Docker](https://docs.pretix.eu/en/latest/admin/installation/docker_smallscale.html#next-steps) for details.
+
+------------------------------------------------------------------------------------------------------------------------
 
 ``` shell
 git clone https://github.com/danskernesdigitalebibliotek/dpl-cms dpl-cms
