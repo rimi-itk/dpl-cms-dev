@@ -6409,6 +6409,7 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 33	4	2024-09-04 11:08:32.307766+00	pretix.event.plugins.enabled	{"plugin": "pretix.plugins.manualpayment"}	9	4	1	\N	t	f	\N	\N	1
 34	4	2024-09-04 11:08:49.837051+00	pretix.event.payment.provider.manual	{"payment_manual__enabled": true, "payment_manual_checkout_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_email_instructions": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_pending_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_public_name": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	9	4	1	\N	t	f	\N	\N	1
 35	4	2024-09-04 11:08:55.142303+00	pretix.event.payment.provider.giftcard	{"payment_giftcard__enabled": false}	9	4	1	\N	t	f	\N	\N	1
+36	1	2024-09-04 11:10:04.836538+00	pretix.team.token.created	{"id": 1, "name": "dpl-cms"}	34	\N	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -6777,6 +6778,14 @@ COPY public.pretixbase_staffsessionauditlog (id, datetime, url, session_id, impe
 113	2024-09-04 11:08:51.836035+00	/control/event/dpl-cms/dpl-cms-series-payment/settings/payment/giftcard	1	\N	GET
 114	2024-09-04 11:08:55.063011+00	/control/event/dpl-cms/dpl-cms-series-payment/settings/payment/giftcard	1	\N	POST
 115	2024-09-04 11:08:55.170852+00	/control/event/dpl-cms/dpl-cms-series-payment/settings/payment	1	\N	GET
+116	2024-09-04 11:09:34.443756+00	/control/	1	\N	GET
+117	2024-09-04 11:09:34.664404+00	/control/widgets.json	1	\N	GET
+118	2024-09-04 11:09:35.920174+00	/control/organizers/	1	\N	GET
+119	2024-09-04 11:09:38.521354+00	/control/organizer/dpl-cms/	1	\N	GET
+120	2024-09-04 11:09:44.351324+00	/control/organizer/dpl-cms/teams	1	\N	GET
+121	2024-09-04 11:09:49.246988+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
+122	2024-09-04 11:10:04.825183+00	/control/organizer/dpl-cms/team/1/	1	\N	POST
+123	2024-09-04 11:10:04.854667+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
 \.
 
 
@@ -6855,6 +6864,7 @@ COPY public.pretixbase_team_members (id, team_id, user_id) FROM stdin;
 --
 
 COPY public.pretixbase_teamapitoken (id, name, active, token, team_id) FROM stdin;
+1	dpl-cms	t	txm2o3xp8e8rfutomzhkptcgc7j02hz9v2h3cv5ndt342ojtr5bekkwi8sudxew6	1
 \.
 
 
@@ -7550,7 +7560,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 35, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 36, true);
 
 
 --
@@ -7760,7 +7770,7 @@ SELECT pg_catalog.setval('public.pretixbase_staffsession_id_seq', 1, true);
 -- Name: pretixbase_staffsessionauditlog_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 115, true);
+SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 123, true);
 
 
 --
@@ -7823,7 +7833,7 @@ SELECT pg_catalog.setval('public.pretixbase_team_members_id_seq', 1, true);
 -- Name: pretixbase_teamapitoken_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_teamapitoken_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_teamapitoken_id_seq', 1, true);
 
 
 --
