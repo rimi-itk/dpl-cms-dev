@@ -16,6 +16,22 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: pretix
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO pretix;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pretix
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -6132,6 +6148,7 @@ COPY public.pretixbase_eventlock (event, date, token) FROM stdin;
 --
 
 COPY public.pretixbase_eventmetaproperty (id, name, "default", organizer_id, protected, required, filter_allowed, filter_public, public_label, "position", choices) FROM stdin;
+1	PSP		1	f	f	t	f	{}	0	[]
 \.
 
 
@@ -6410,6 +6427,7 @@ COPY public.pretixbase_logentry (id, object_id, datetime, action_type, data, con
 34	4	2024-09-04 11:08:49.837051+00	pretix.event.payment.provider.manual	{"payment_manual__enabled": true, "payment_manual_checkout_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_email_instructions": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_pending_description": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}, "payment_manual_public_name": {"ar": "", "ca": "", "cs": "", "da": "Manual payment", "de": "", "de-informal": "", "el": "", "en": "", "es": "", "fr": "", "id": "", "it": "", "lv": "", "nb-no": "", "nl": "", "nl-informal": "", "pl": "", "pt-pt": "", "ro": "", "ru": "", "sk": "", "sv": "", "tr": "", "uk": "", "zh-hans": "", "zh-hant": ""}}	9	4	1	\N	t	f	\N	\N	1
 35	4	2024-09-04 11:08:55.142303+00	pretix.event.payment.provider.giftcard	{"payment_giftcard__enabled": false}	9	4	1	\N	t	f	\N	\N	1
 36	1	2024-09-04 11:10:04.836538+00	pretix.team.token.created	{"id": 1, "name": "dpl-cms"}	34	\N	1	\N	t	f	\N	\N	1
+37	1	2024-09-04 12:46:57.925811+00	pretix.property.created	{"name": "PSP"}	41	\N	1	\N	t	f	\N	\N	1
 \.
 
 
@@ -6786,6 +6804,11 @@ COPY public.pretixbase_staffsessionauditlog (id, datetime, url, session_id, impe
 121	2024-09-04 11:09:49.246988+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
 122	2024-09-04 11:10:04.825183+00	/control/organizer/dpl-cms/team/1/	1	\N	POST
 123	2024-09-04 11:10:04.854667+00	/control/organizer/dpl-cms/team/1/	1	\N	GET
+124	2024-09-04 12:46:46.054391+00	/control/organizer/dpl-cms/properties	1	\N	GET
+125	2024-09-04 12:46:48.915618+00	/control/organizer/dpl-cms/properties	1	\N	GET
+126	2024-09-04 12:46:50.334335+00	/control/organizer/dpl-cms/property/add	1	\N	GET
+127	2024-09-04 12:46:57.909854+00	/control/organizer/dpl-cms/property/add	1	\N	POST
+128	2024-09-04 12:46:57.957322+00	/control/organizer/dpl-cms/properties	1	\N	GET
 \.
 
 
@@ -7392,7 +7415,7 @@ SELECT pg_catalog.setval('public.pretixbase_eventfooterlink_id_seq', 1, false);
 -- Name: pretixbase_eventmetaproperty_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, false);
+SELECT pg_catalog.setval('public.pretixbase_eventmetaproperty_id_seq', 1, true);
 
 
 --
@@ -7560,7 +7583,7 @@ SELECT pg_catalog.setval('public.pretixbase_itemvariationmetavalue_id_seq', 1, f
 -- Name: pretixbase_logentry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 36, true);
+SELECT pg_catalog.setval('public.pretixbase_logentry_id_seq', 37, true);
 
 
 --
@@ -7770,7 +7793,7 @@ SELECT pg_catalog.setval('public.pretixbase_staffsession_id_seq', 1, true);
 -- Name: pretixbase_staffsessionauditlog_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pretix
 --
 
-SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 123, true);
+SELECT pg_catalog.setval('public.pretixbase_staffsessionauditlog_id_seq', 128, true);
 
 
 --
@@ -14448,6 +14471,13 @@ ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
 
 ALTER TABLE ONLY public.ticketoutputpdf_ticketlayoutitem
     ADD CONSTRAINT ticketoutputpdf_ticketlayoutitem_layout_id_9b76e49f_fk FOREIGN KEY (layout_id) REFERENCES public.ticketoutputpdf_ticketlayout(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pretix
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 
 
 --
